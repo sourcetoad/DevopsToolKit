@@ -1,0 +1,80 @@
+# Last two digits of port number are the MAJOR.MINOR of the data source
+# Everything ahead of the last two digits are standard for the given service
+#
+# Network name is st-{service name}-{service MAJOR.MINOR}
+version: '2'
+services:
+  nginxproxy:
+# Enable nginx debug and increase output verbosity
+#    command: [nginx-debug, '-g', 'daemon off;']
+    image: jwilder/nginx-proxy
+    container_name: sourcetoad_nginx_proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./proxy_increase.conf:/etc/nginx/proxy.conf
+    networks:
+     - nginx-proxy
+  postgres95:
+    image: postgres:9.5
+    container_name: sourcetoad_postgres95
+    ports:
+      - "5495:5432"
+    environment:
+      - POSTGRES_USER=postgres_user
+      - POSTGRES_PASSWORD=postgres_pass
+    networks:
+      - st-postgres-95
+    command: "postgres
+                -c logging_collector='on'
+                -c log_directory='/var/log/postgresql'
+                -c log_filename='%Y-%m-%d.log'
+                -c log_line_prefix='%t %v '
+                -c log_statement='all'"
+  mysql56:
+    image: mysql:5.6
+    container_name: sourcetoad_mysql56
+    ports:
+      - "3356:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=mysql_user
+      - MYSQL_PASSWORD=mysql_pass
+    networks:
+      - st-mysql-56
+  mariadb101:
+    image: mariadb:10.1
+    container_name: sourcetoad_mariadb101
+    ports:
+      - "33101:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=mariadb_user
+      - MYSQL_PASSWORD=mariadb_pass
+    networks:
+      - st-mariadb-101
+  redis32:
+    image: redis:3.2-alpine
+    command: redis-server --appendonly yes
+    container_name: sourcetoad_redis32
+    ports:
+      - "6332:6379"
+    networks:
+      - st-redis-32
+networks:
+    nginx-proxy:
+        external:
+            name: nginx-proxy
+    st-postgres-95:
+        external:
+            name: st-postgres-95
+    st-mysql-56:
+        external:
+            name: st-mysql-56
+    st-mariadb-101:
+        external:
+            name: st-mariadb-101
+    st-redis-32:
+        external:
+            name: st-redis-32

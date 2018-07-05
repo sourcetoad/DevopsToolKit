@@ -1,0 +1,56 @@
+version: '2'
+services:
+    # Web Container (talks to nginx-proxy)
+    # The virtual host environment line allows nginx-proxy to know which domain
+    # to proxy to which container.
+    # Additionally, other networks can be registered (databases needed)
+    [PROJECT_NAME]-web:
+        image: nginx:latest
+        container_name: sourcetoad_[PROJECT_NAME]_web
+        environment:
+          - VIRTUAL_HOST=[WEBSITE.DOCKER]
+        volumes:
+            - ../:/code
+            - ./config/vhost.conf:/etc/nginx/conf.d/vhost.conf
+        networks:
+            - genome-internal
+            - nginx-proxy
+    # PHP Container
+    # The environment variables allow Xdebug to work properly.
+    # Networks much like above can be registered depending on what the application
+    # requires. In this case, redis and MariaDB.
+    [PROJECT_NAME]-php:
+        container_name: sourcetoad_[PROJECT_NAME]_php
+        environment:
+          XDEBUG_CONFIG: "remote_host=10.254.254.254"
+          PHP_IDE_CONFIG: "serverName=docker"
+        build: .
+        volumes:
+            - ../:/code
+        networks:
+            - [PROJECT_NAME]-internal
+    # Optional DB Container
+    # For projects that the database required isn't available in dev-ops, we can
+    # leverage our own database, like below using MariaDB 10.2.
+    [PROJECT_NAME]-mariadb102:
+        image: mariadb:10.2
+        container_name: sourcetoad_[PROJECT_NAME]_mariadb102
+        ports:
+          - "33102:3306"
+        environment:
+          - MYSQL_ROOT_PASSWORD=root
+          - MYSQL_USER=mariadb_user
+          - MYSQL_PASSWORD=mariadb_pass
+        networks:
+          - [PROJECT_NAME]-internal
+# These are networks that you are leveraging from outside (external) locations.
+# The dev-ops repo is already running, so these networks already exist. We tell
+# docker which networks of the dev-ops repo we need.
+networks:
+  [PROJECT_NAME]-internal:
+  nginx-proxy:
+    external:
+      name: nginx-proxy
+  st-redis-32:
+    external:
+      name: st-redis-32
