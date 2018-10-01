@@ -29,7 +29,7 @@ services:
             - ../:/code
         networks:
             - [PROJECT_NAME]-internal
-            - st-mariadb-101
+            - st-mariadb-102
             - st-redis-32
 # These are networks that you are leveraging from outside (external) locations.
 # The dev-ops repo is already running, so these networks already exist. We tell
@@ -42,6 +42,6 @@ networks:
     st-redis-32:
         external:
             name: st-redis-32
-    st-mariadb-101:
+    st-mariadb-102:
         external:
-            name: st-mariadb-101
+            name: st-mariadb-102
