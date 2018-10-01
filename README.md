@@ -23,7 +23,7 @@ of these services, you likely would not use a docker version of them in producti
 4. Execute `./network-creation.sh`
 - If this fails, then manual configuration is necessary before compilation. Perform the following:
    1. `docker network create nginx-proxy`
-   2. `docker network create st-mariadb-101`
+   2. `docker network create st-mariadb-102`
    3. `docker network create st-mysql-56`
    4. `docker network create st-postgres-95`
    5. `docker network create st-redis-32`
