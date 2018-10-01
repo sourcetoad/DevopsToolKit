@@ -43,17 +43,17 @@ services:
       - MYSQL_PASSWORD=mysql_pass
     networks:
       - st-mysql-56
-  mariadb101:
-    image: mariadb:10.1
-    container_name: sourcetoad_mariadb101
+  mariadb102:
+    image: mariadb:10.2
+    container_name: sourcetoad_mariadb102
     ports:
-      - "33101:3306"
+      - "33102:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_USER=mariadb_user
       - MYSQL_PASSWORD=mariadb_pass
     networks:
-      - st-mariadb-101
+      - st-mariadb-102
   redis32:
     image: redis:3.2-alpine
     command: redis-server --appendonly yes
@@ -72,9 +72,9 @@ networks:
     st-mysql-56:
         external:
             name: st-mysql-56
-    st-mariadb-101:
+    st-mariadb-102:
         external:
-            name: st-mariadb-101
+            name: st-mariadb-102
     st-redis-32:
         external:
             name: st-redis-32
