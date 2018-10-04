@@ -17,7 +17,7 @@ of these services, you likely would not use a docker version of them in producti
 ## Docker
 
 ### devop-tools (data source services / domain tools)
-1. Execute `git clone git@github.com:sourcetoad/devop-tools.git`
+1. Execute `git clone git@github.com:sourcetoad/DevopsToolKit.git`
 2. `cd devop-tools`
 3. `cd ./docker/data-source-services/`
 4. Execute `./network-creation.sh`
