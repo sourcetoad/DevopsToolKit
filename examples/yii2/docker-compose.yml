@@ -23,7 +23,7 @@ services:
         container_name: sourcetoad_[PROJECT_NAME]_php
         build: .
         environment:
-          XDEBUG_CONFIG: "remote_host=10.254.254.254"
+          XDEBUG_CONFIG: "remote_host=host.docker.internal"
           PHP_IDE_CONFIG: "serverName=docker"
         volumes:
             - ../:/code
