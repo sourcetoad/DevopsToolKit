@@ -32,9 +32,10 @@
 
 
 ## Running Xdebug with PHPStorm alongside Docker.
-Any logic that needs to speak to the host machine will need to point to the IP of `10.254.254.254`.
+From Docker versions 18.03 and above, Docker creates a special DNS name that resolves
+to the internal IP address used by the host. 
 
-For Xdebug to work through PHPStorm first execute:
+Old logic (that has not updated to special DNS name) will need to point to the IP of `10.254.254.254`.
 
 ```
 sudo ifconfig lo0 alias 10.254.254.254
