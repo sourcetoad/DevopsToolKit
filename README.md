@@ -28,8 +28,12 @@ of these services, you likely would not use a docker version of them in producti
    4. `docker network create st-postgres-95`
    5. `docker network create st-redis-32`
 5. Execute `docker-compose up --build`
-5. Wait for the terminal to complete executing.
-6. You now have Sourcetoad data sources running and logging to the console.
+- If you're in a Windows environment, then perform the following if your build fails:
+   1. Kill, and optionally disable, the `World Wide Web Publishing Service`.
+   2. Run `set COMPOSE_CONVERT_WINDOWS_PATHS=1` in your CMD or PowerShell terminal.
+   3. Redo step `5` or follow more detailed steps [here](https://github.com/docker/compose/issues/4303#issuecomment-379563170).
+6. Wait for the terminal to complete executing.
+7. You now have Sourcetoad data sources running and logging to the console.
 
 ## Examples
 Inside the `examples` folder you will find example Docker configurations for
