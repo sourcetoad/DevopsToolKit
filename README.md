@@ -27,6 +27,7 @@ of these services, you likely would not use a docker version of them in producti
    3. `docker network create st-mysql-56`
    4. `docker network create st-postgres-95`
    5. `docker network create st-redis-32`
+   6. `docker network create st-internal`
 5. Execute `docker-compose up --build`
 - If you're in a Windows environment, then perform the following if your build fails:
    1. Kill, and optionally disable, the `World Wide Web Publishing Service`.
