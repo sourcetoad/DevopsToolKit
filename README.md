@@ -44,7 +44,6 @@ The examples make the assumption that any domain used for local development is
 already added to the `/etc/hosts` file. You can edit to add `127.0.0.1 domain.docker`.
 
 ## Docs
- * [Setting up D4M-NFS](docs/d4m-nfs/README.md)
  * [Setting up Nginx-Proxy](docs/nginx-proxy/README.md)
  * [Setting up PHP Testing in PHPStorm](docs/phpstorm-docker/README.md)
  * [Setting up Python Debugging in Pycharm](docs/pycharm-debugging/README.md)

@@ -1,4 +1,4 @@
-FROM php:7.2-fpm
+FROM php:7.2-fpm-stretch
 
 # System dependencies needed
 RUN apt-get update && apt-get install -y \
@@ -46,7 +46,7 @@ RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
     && rm -f /tmp/composer-setup.*
 
 # Node: We should use another container for this, since we are mixing PHP and Node
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
     && apt-get install -y nodejs
 
 # Yarn: Installing
