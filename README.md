@@ -16,7 +16,7 @@ of these services, you likely would not use a docker version of them in producti
 
 ## Docker
 
-### devop-tools (data source services / domain tools)
+### Required: data source services
 1. Execute `git clone git@github.com:sourcetoad/DevopsToolKit.git devop-tools`
 2. `cd devop-tools`
 3. `cd ./docker/data-source-services/`
@@ -34,6 +34,21 @@ of these services, you likely would not use a docker version of them in producti
    3. Redo step `5` or follow more detailed steps [here](https://github.com/docker/compose/issues/4303#issuecomment-379563170).
 6. Wait for the terminal to complete executing.
 7. You now have Sourcetoad data sources running and logging to the console.
+
+### Optional: data source tools
+1. Optionally included is the following tools:
+ * phpMyAdmin
+2. `cd devop-tools`
+3. `cd ./docker/data-source-tools/`
+4. Execute `docker-compose up --build`
+5. Wait for the terminal to complete executing.
+6. You know have Sourcetoad data source tools running.
+
+## phpMyAdmin
+If the optional tools are launched, you can find phpMyAdmin at: localhost:8080
+  * It supports the following databases...
+    * mariadb102
+    * mariadb103
 
 ## Examples
 Inside the `examples` folder you will find example Docker configurations for
