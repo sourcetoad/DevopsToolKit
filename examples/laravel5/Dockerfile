@@ -1,4 +1,4 @@
-FROM php:7.2-fpm-stretch
+FROM php:7.4
 
 # System dependencies needed
 RUN apt-get update && apt-get install -y \
@@ -58,6 +58,6 @@ RUN sed -i -e "s/pm.max_spare_servers\s*=\s*[0-9]*/pm.max_spare_servers = 10/g" 
 RUN sed -i -e "s/;pm.max_requests\s*=\s*[0-9]*/pm.max_requests = 500/g" /usr/local/etc/php-fpm.d/www.conf
 RUN sed -i -e "s/access.log/;access.log/g" /usr/local/etc/php-fpm.d/docker.conf
 
-# Expose PHP and execute php-fpm 
+# Expose PHP and execute php-fpm
 EXPOSE 9000
 CMD ["php-fpm"]

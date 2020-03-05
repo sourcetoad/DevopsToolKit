@@ -1,5 +1,5 @@
 FROM php:7.0-fpm
- 
+
 # System dependencies needed
 RUN apt-get update && apt-get install -y \
     git \
@@ -44,6 +44,6 @@ RUN sed -i -e "s/;pm.max_requests\s*=\s*[0-9]*/pm.max_requests = 500/g" /usr/loc
 RUN sed -i -e "s/access.log/;access.log/g" /usr/local/etc/php-fpm.d/docker.conf
 RUN sed -i -e "s/^error_log.*/error_log = \/proc\/self\/fd\/2/" /usr/local/etc/php-fpm.d/www.conf
 
-# Expose PHP and execute php-fpm 
+# Expose PHP and execute php-fpm
 EXPOSE 9000
 CMD ["php-fpm"]

@@ -14,7 +14,6 @@ services:
             - ./config/vhost.conf:/etc/nginx/conf.d/vhost.conf
         networks:
             - st-internal
-            - nginx-proxy
     # PHP Container
     # The environment variables allow Xdebug to work properly.
     # Networks much like above can be registered depending on what the application
@@ -29,20 +28,9 @@ services:
             - ../:/code
         networks:
             - st-internal
-            - st-mariadb-102            
 # These are networks that you are leveraging from outside (external) locations.
-# The dev-ops repo is already running, so these networks already exist. We tell
-# docker which networks of the dev-ops repo we need.
+# The dev-ops repo is already running, so that network (st-internal) exists.
 networks:
   st-internal:
     external:
       name: st-internal
-  nginx-proxy:
-    external:
-      name: nginx-proxy
-  st-redis-32:
-    external:
-      name: st-redis-32
-  st-mariadb-102:
-    external:
-      name: st-mariadb-102
