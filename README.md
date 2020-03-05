@@ -42,7 +42,7 @@ of these services, you likely would not use a docker version of them in producti
 3. `cd ./docker/data-source-tools/`
 4. Execute `docker-compose up --build`
 5. Wait for the terminal to complete executing.
-6. You know have Sourcetoad data source tools running.
+6. You now have Sourcetoad data source tools running.
 
 ## phpMyAdmin
 If the optional tools are launched, you can find phpMyAdmin at: localhost:8080
