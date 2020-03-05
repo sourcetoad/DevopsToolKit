@@ -32,17 +32,17 @@ services:
                 -c log_filename='%Y-%m-%d.log'
                 -c log_line_prefix='%t %v '
                 -c log_statement='all'"
-  mysql56:
-    image: mysql:5.6
-    container_name: sourcetoad_mysql56
+  mariadb103:
+    image: mariadb:10.3
+    container_name: sourcetoad_mariadb103
     ports:
-      - "3356:3306"
+      - "33103:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=mysql_user
-      - MYSQL_PASSWORD=mysql_pass
+      - MYSQL_USER=mariadb_user
+      - MYSQL_PASSWORD=mariadb_pass
     networks:
-      - st-mysql-56
+      - st-internal
   mariadb102:
     image: mariadb:10.2
     container_name: sourcetoad_mariadb102
@@ -69,9 +69,9 @@ networks:
     st-postgres-95:
         external:
             name: st-postgres-95
-    st-mysql-56:
+    st-internal:
         external:
-            name: st-mysql-56
+            name: st-internal
     st-mariadb-102:
         external:
             name: st-mariadb-102
