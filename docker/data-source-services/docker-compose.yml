@@ -34,6 +34,17 @@ services:
                 -c log_filename='%Y-%m-%d.log'
                 -c log_line_prefix='%t %v '
                 -c log_statement='all'"
+  mariadb104:
+    image: mariadb:10.4
+    container_name: sourcetoad_mariadb104
+    ports:
+      - "33104:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=mariadb_user
+      - MYSQL_PASSWORD=mariadb_pass
+    networks:
+      - st-internal
   mariadb103:
     image: mariadb:10.3
     container_name: sourcetoad_mariadb103
