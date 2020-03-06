@@ -1,3 +1,10 @@
+# v1.2.0 (March 6, 2020)
+ * Removed mysql56
+ * Deprecated networks that aren't "st-internal"
+ * Added MariaDB10.3
+ * Added MariaDB10.4
+ * Added optional phpMyAdmin
+
 # v1.1.1 (August 16, 2019)
  * Removed d4m guide.
  * Updated Laravel docker container to Node10 (previously Node8)
