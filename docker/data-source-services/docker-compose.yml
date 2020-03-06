@@ -16,6 +16,7 @@ services:
       - ./proxy_increase.conf:/etc/nginx/proxy.conf
     networks:
      - nginx-proxy
+     - st-internal
   postgres95:
     image: postgres:9.5
     container_name: sourcetoad_postgres95
@@ -26,23 +27,35 @@ services:
       - POSTGRES_PASSWORD=postgres_pass
     networks:
       - st-postgres-95
+      - st-internal
     command: "postgres
                 -c logging_collector='on'
                 -c log_directory='/var/log/postgresql'
                 -c log_filename='%Y-%m-%d.log'
                 -c log_line_prefix='%t %v '
                 -c log_statement='all'"
-  mysql56:
-    image: mysql:5.6
-    container_name: sourcetoad_mysql56
+  mariadb104:
+    image: mariadb:10.4
+    container_name: sourcetoad_mariadb104
     ports:
-      - "3356:3306"
+      - "33104:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=mysql_user
-      - MYSQL_PASSWORD=mysql_pass
+      - MYSQL_USER=mariadb_user
+      - MYSQL_PASSWORD=mariadb_pass
     networks:
-      - st-mysql-56
+      - st-internal
+  mariadb103:
+    image: mariadb:10.3
+    container_name: sourcetoad_mariadb103
+    ports:
+      - "33103:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=mariadb_user
+      - MYSQL_PASSWORD=mariadb_pass
+    networks:
+      - st-internal
   mariadb102:
     image: mariadb:10.2
     container_name: sourcetoad_mariadb102
@@ -54,6 +67,7 @@ services:
       - MYSQL_PASSWORD=mariadb_pass
     networks:
       - st-mariadb-102
+      - st-internal
   redis32:
     image: redis:3.2-alpine
     command: redis-server --appendonly yes
@@ -62,6 +76,7 @@ services:
       - "6332:6379"
     networks:
       - st-redis-32
+      - st-internal
 networks:
     nginx-proxy:
         external:
@@ -69,9 +84,9 @@ networks:
     st-postgres-95:
         external:
             name: st-postgres-95
-    st-mysql-56:
+    st-internal:
         external:
-            name: st-mysql-56
+            name: st-internal
     st-mariadb-102:
         external:
             name: st-mariadb-102

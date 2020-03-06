@@ -1,0 +1,17 @@
+version: '2'
+services:
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: sourcetoad_phpmyadmin
+    ports:
+      - 8080:80
+    networks:
+      - st-internal
+    environment:
+      PMA_HOSTS: mariadb102,mariadb103,mariadb104
+      PMA_USER: root
+      PMA_PASSWORD: root
+networks:
+    st-internal:
+        external:
+            name: st-internal
