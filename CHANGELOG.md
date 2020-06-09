@@ -1,3 +1,6 @@
+# v1.2.1 (June 9, 2020)
+ * Added PostgreSQL v9.4
+
 # v1.2.0 (March 6, 2020)
  * Removed mysql56
  * Deprecated networks that aren't "st-internal"
