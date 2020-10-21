@@ -22,7 +22,7 @@ of these services, you likely would not use a docker version of them in producti
 3. `cd ./docker/data-source-services/`
 4. Execute `./network-creation.sh`
 - If this fails, then manual configuration is necessary before compilation. Perform the following:
-   1. `docker network create nginx-proxy`
+   1. `docker network create st-internal`
 5. Execute `docker-compose up --build`
 - If you're in a Windows environment, then perform the following if your build fails:
    1. Kill, and optionally disable, the `World Wide Web Publishing Service`.
