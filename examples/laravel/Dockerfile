@@ -28,7 +28,6 @@ RUN docker-php-ext-install calendar zip intl pdo_mysql bcmath opcache pdo
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install bz2
-RUN docker-php-ext-install soap
 
 # Xdebug install (Allowing debugging for PHP)
 RUN pecl install xdebug
@@ -44,7 +43,7 @@ WORKDIR /code
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 # Node: We should use another container for this, since we are mixing PHP and Node
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
     && apt-get install -y nodejs
 
 # Yarn: Installing
