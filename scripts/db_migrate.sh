@@ -8,7 +8,7 @@ DB_PORT=''
 DB_HOST='127.0.0.1'
 DB_USER='root'
 DB_PASS='root'
-DB_EXPORT_FLAGS='--column-statistics=0 --quick --hex-blob --single-transaction'
+DB_EXPORT_FLAGS='--routines --column-statistics=0 --quick --hex-blob --single-transaction'
 DB_IMPORT_FLAGS=''
 
 # Determine DB
