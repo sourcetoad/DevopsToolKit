@@ -54,6 +54,11 @@ popular frameworks like Laravel and Yii2.
 The examples make the assumption that any domain used for local development is
 already added to the `/etc/hosts` file. You can edit to add `127.0.0.1 domain.docker`.
 
+## Scripts
+Inside the `scripts` folder you will find one-off scripts to help with tasks.
+
+ * `db_migrate.sh` - Helps migrate databases between versions of mysql.
+
 ## Docs
  * [Setting up Nginx-Proxy](docs/nginx-proxy/README.md)
  * [Setting up PHP Testing in PHPStorm](docs/phpstorm-docker/README.md)
