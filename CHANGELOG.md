@@ -1,3 +1,10 @@
+# v1.3.0 (November 9, 2020)
+ * Retire non `st-internal` network names (not yet removed).
+ * Remove outdated python and upsource documentation.
+ * Move yii2-shell docs into /docs
+ * Add `./scripts/db_migrate` for moving databases between versions of database.
+ * Update docker templates for latest php74 packages/versions.
+
 # v1.2.1 (June 9, 2020)
  * Added PostgreSQL v9.4
 
