@@ -43,9 +43,10 @@ of these services, you likely would not use a docker version of them in producti
 ## phpMyAdmin
 If the optional tools are launched, you can find phpMyAdmin at: localhost:8080
   * It supports the following databases...
-    * mariadb102
+    * mariadb102 (deprecated)
     * mariadb103
     * mariadb104
+    * mariadb105
 
 ## Examples
 Inside the `examples` folder you will find example Docker configurations for
