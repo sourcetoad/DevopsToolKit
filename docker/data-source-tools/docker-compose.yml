@@ -8,7 +8,7 @@ services:
     networks:
       - st-internal
     environment:
-      PMA_HOSTS: mariadb102,mariadb103,mariadb104
+      PMA_HOSTS: mariadb102,mariadb103,mariadb104,mariadb105
       PMA_USER: root
       PMA_PASSWORD: root
 networks:
