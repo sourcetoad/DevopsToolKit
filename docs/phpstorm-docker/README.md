@@ -39,17 +39,7 @@ services:
         volumes:
             - ../:/code:delegated
         networks:
-            - project-internal
-            - st-mariadb-101
-            - st-redis-32
-networks:
-    project-internal:
-    st-redis-32:
-        external:
-            name: st-redis-32
-    st-mariadb-101:
-        external:
-            name: st-mariadb-101
+            - st-internal
 ```
 
 As you can see, it is a subset of the compose file. It only includes a clone of 
