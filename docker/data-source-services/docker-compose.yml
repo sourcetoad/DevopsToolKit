@@ -86,5 +86,4 @@ services:
       - st-internal
 networks:
     st-internal:
-        external:
-            name: st-internal
+        name: st-internal
