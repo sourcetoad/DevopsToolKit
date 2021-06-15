@@ -40,7 +40,7 @@ COPY ./config/php.ini /usr/local/etc/php/
 WORKDIR /code
 
 # Make sure we're installing what we think we're installing!
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
 # Node: We should use another container for this, since we are mixing PHP and Node
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
