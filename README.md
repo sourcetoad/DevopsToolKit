@@ -10,35 +10,29 @@ need. It also provides a proxy setup via nginx-proxy so that multiple projects
 can be run at the same time without the need for different ports.
 
 This means docker configurations for each project only needs to worry about the
-the language and other tools it may need, as the databases and other services are
+language and other tools it may need, as the databases and other services are
 standardized in this project. Since most cloud providers provide managed versions
 of these services, you likely would not use a docker version of them in production.
 
 ## Docker
 
 ### Required: data source services
-1. Execute `git clone git@github.com:sourcetoad/DevopsToolKit.git devop-tools`
-2. `cd devop-tools`
-3. `cd ./docker/data-source-services/`
-4. Execute `./network-creation.sh`
-- If this fails, then manual configuration is necessary before compilation. Perform the following:
-   1. `docker network create st-internal`
-5. Execute `docker-compose up --build`
-- If you're in a Windows environment, then perform the following if your build fails:
-   1. Kill, and optionally disable, the `World Wide Web Publishing Service`.
-   2. Run `set COMPOSE_CONVERT_WINDOWS_PATHS=1` in your CMD or PowerShell terminal.
-   3. Redo step `5` or follow more detailed steps [here](https://github.com/docker/compose/issues/4303#issuecomment-379563170).
-6. Wait for the terminal to complete executing.
-7. You now have Sourcetoad data sources running and logging to the console.
 
-### Optional: data source tools
-1. Optionally included is the following tools:
- * phpMyAdmin
-2. `cd devop-tools`
-3. `cd ./docker/data-source-tools/`
-4. Execute `docker-compose up --build`
-5. Wait for the terminal to complete executing.
-6. You now have Sourcetoad data source tools running.
+```bash
+git clone git@github.com:sourcetoad/DevopsToolKit.git devop-tools
+./devop-tools/docker/data-source-services/network-creation.sh
+cd ./devop-tools/docker/data-source-services && docker-compose up --build -d
+```
+
+#### Specific Setup - Windows
+ * Kill, and optionally disable, the `World Wide Web Publishing Service`
+ * Run `set COMPOSE_CONVERT_WINDOWS_PATHS=1` in your CMD or PowerShell terminal
+ * Optionally, [read](https://github.com/docker/compose/issues/4303#issuecomment-379563170) this bug report.
+
+### Optional: Data Source Tools
+* Optionally included is the following tools:
+  * phpMyAdmin
+* `cd ./devop-tools/docker/data-source-tools && docker-compose up --build -d`
 
 ## phpMyAdmin
 If the optional tools are launched, you can find phpMyAdmin at: localhost:8080
