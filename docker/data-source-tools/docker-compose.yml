@@ -4,7 +4,7 @@ services:
     image: phpmyadmin/phpmyadmin:latest
     container_name: sourcetoad_phpmyadmin
     ports:
-      - 8080:80
+      - "8080:80"
     networks:
       - st-internal
     environment:
