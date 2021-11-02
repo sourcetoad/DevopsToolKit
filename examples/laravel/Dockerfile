@@ -1,7 +1,7 @@
 FROM php:8.0-fpm
 
 # System dependencies needed
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install --no-install-recommends -y \
     git \
     vim \
     openssl \
@@ -44,7 +44,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
 # Node: We should use another container for this, since we are mixing PHP and Node
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
-    && apt-get install -y nodejs
+    && apt-get install --no-install-recommends -y nodejs
 
 # Yarn: Installing
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash
