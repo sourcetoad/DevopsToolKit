@@ -23,14 +23,14 @@ using the daemon option "Docker for Mac".
 
 ![docker-phpstorm-overview](./assets/docker-phpstorm.png)
 
-### Creating an isolated docker-compose for testing.
+### Creating an isolated docker-compose for testing
 
 In order for PHPStorm to run tests without affecting containers. You need to create a new container that matches
 whatever container your code works on.
 
 For example, here a random PHP project `docker-compose-phpstorm.yml` file.
 
-```text
+```bash
 version: '2'
 services:
     project-test:
@@ -86,7 +86,7 @@ attached into the container. Since, we used Codeception, we will continue to use
 
 Our goal is to select the "Defined in the Configuration File". No matter the tool, if you configured it correctly, we
 can just use those values and inherit.
- 
+
 This demo has made an additional change and requested Codeception to only run the "unit" test suite.
 
 ![phpstorm-setting-up-unittest](./assets/docker-unittest.png)
