@@ -22,15 +22,14 @@ docker system df
 docker system prune
 ```
 
-
 ## Passwords
 
 * PostgreSQL
-    - `username: postgres_user`
-    - `password: postgres_pass`
+  * `username: postgres_user`
+  * `password: postgres_pass`
 * MariaDB
-    - `username: mariadb_user`
-    - `password: mariadb_pass`
+  * `username: mariadb_user`
+  * `password: mariadb_pass`
 
 ## Running Xdebug with PHPStorm alongside Docker
 From Docker versions 18.03 and above, Docker creates a special DNS name that resolves

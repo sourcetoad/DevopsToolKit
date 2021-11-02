@@ -33,7 +33,7 @@ cd ./devop-tools/docker/data-source-services && docker-compose up --build -d
 
 ### Optional: Data Source Tools
 * Optionally included is the following tools:
-    * phpMyAdmin
+  * phpMyAdmin
 * `cd ./devop-tools/docker/data-source-tools && docker-compose up --build -d`
 
 ## phpMyAdmin
