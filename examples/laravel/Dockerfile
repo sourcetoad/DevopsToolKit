@@ -43,11 +43,11 @@ WORKDIR /code
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
 # Node: We should use another container for this, since we are mixing PHP and Node
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -o pipefail - \
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
     && apt-get install --no-install-recommends -y nodejs
 
 # Yarn: Installing
-RUN curl -o- -L https://yarnpkg.com/install.sh | bash -o pipefail
+RUN curl -o- -L https://yarnpkg.com/install.sh | bash
 
 # Change settings for the fpm pool
 RUN sed -i -e "s/pm.max_children\s*=\s*[0-9]*/pm.max_children = 30/g" /usr/local/etc/php-fpm.d/www.conf
