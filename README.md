@@ -27,22 +27,22 @@ cd ./devop-tools/docker/data-source-services && docker-compose up --build -d
 ```
 
 #### Specific Setup - Windows
- * Kill, and optionally disable, the `World Wide Web Publishing Service`
- * Run `set COMPOSE_CONVERT_WINDOWS_PATHS=1` in your CMD or PowerShell terminal
- * Optionally, [read](https://github.com/docker/compose/issues/4303#issuecomment-379563170) this bug report.
+* Kill, and optionally disable, the `World Wide Web Publishing Service`
+* Run `set COMPOSE_CONVERT_WINDOWS_PATHS=1` in your CMD or PowerShell terminal
+* Optionally, [read](https://github.com/docker/compose/issues/4303#issuecomment-379563170) this bug report.
 
 ### Optional: Data Source Tools
 * Optionally included is the following tools:
-  * phpMyAdmin
+    - phpMyAdmin
 * `cd ./devop-tools/docker/data-source-tools && docker-compose up --build -d`
 
 ## phpMyAdmin
 If the optional tools are launched, you can find phpMyAdmin at: localhost:8080
-  * It supports the following databases...
-    * mariadb102 (deprecated)
-    * mariadb103
-    * mariadb104
-    * mariadb105
+* It supports the following databases...
+    - mariadb102 (deprecated)
+    - mariadb103
+    - mariadb104
+    - mariadb105
 
 ## Examples
 Inside the `examples` folder you will find example Docker configurations for
@@ -54,9 +54,9 @@ already added to the `/etc/hosts` file. You can edit to add `127.0.0.1 domain.do
 ## Scripts
 Inside the `scripts` folder you will find one-off scripts to help with tasks.
 
- * `db_migrate.sh` - Helps migrate databases between versions of mysql.
+* `db_migrate.sh` - Helps migrate databases between versions of mysql.
 
 ## Docs
- * [Setting up Nginx-Proxy](docs/nginx-proxy/README.md)
- * [Setting up PHP Testing in PHPStorm](docs/phpstorm-docker/README.md)
- * [Leveraging Yii2 Shell](docs/yii2/yii-shell.md)
+* [Setting up Nginx-Proxy](docs/nginx-proxy/README.md)
+* [Setting up PHP Testing in PHPStorm](docs/phpstorm-docker/README.md)
+* [Leveraging Yii2 Shell](docs/yii2/yii-shell.md)
