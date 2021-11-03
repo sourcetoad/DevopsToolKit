@@ -1,14 +1,15 @@
+---
 version: '2'
 services:
     # Web Container (talks to nginx-proxy)
     # The virtual host environment line allows nginx-proxy to know which domain
     # to proxy to which container.
     # Additionally, other networks can be registered (databases needed)
-    [PROJECT_NAME]-web:
+    ProjectName-web:
         image: nginx:latest
-        container_name: sourcetoad_[PROJECT_NAME]_web
+        container_name: sourcetoad_ProjectName_web
         environment:
-            - VIRTUAL_HOST=[WEBSITE.DOCKER]
+            - VIRTUAL_HOST=ProjectName.docker
         volumes:
             - ../:/code
             - ./config/vhost.conf:/etc/nginx/conf.d/vhost.conf
@@ -16,14 +17,14 @@ services:
             - st-internal
     # PHP Container
     # The environment variables allow Xdebug to work properly.
-    # Networks much like above can be registered depending on what the application
+    # Networks much like above can be registered depending on what the app
     # requires. In this case, redis and MariaDB.
-    [PROJECT_NAME]-php:
-        container_name: sourcetoad_[PROJECT_NAME]_php
+    ProjectName-php:
+        container_name: sourcetoad_ProjectName_php
         build: .
         environment:
-          XDEBUG_CONFIG: "remote_host=host.docker.internal"
-          PHP_IDE_CONFIG: "serverName=docker"
+            - XDEBUG_CONFIG="remote_host=host.docker.internal"
+            - PHP_IDE_CONFIG="serverName=docker"
         volumes:
             - ../:/code
         networks:
