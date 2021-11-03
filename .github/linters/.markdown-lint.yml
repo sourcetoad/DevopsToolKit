@@ -1,0 +1,12 @@
+# Hard wrap to 120, not 80
+MD013:
+  line_length: 120
+
+# Allow no new lines between h1 tags (Changelog)
+MD022: false
+
+# Allow multiple h1 tags (Changelog)
+MD025: false
+
+# Allow no new lines between lists (Changelog)
+MD032: false

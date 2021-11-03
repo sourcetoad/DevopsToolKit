@@ -7,16 +7,17 @@ This is provided by the YiiSoft [yii2-shell](https://github.com/yiisoft/yii2-she
 
 ## Usage
 
-The shell is available via the Yii CLI with `console/yii shell`. This will provide a prompt that evaluates PHP code in the context of a
-fully bootstrapped application.  
-In common usage, it is likely preferable to access this via one of the Docker containers like `docker exec -it sourcetoad_core_php console/yii shell`.
-This allows for Docker based routing to the database container and the Station/Satellite pair.
+The shell is available via the Yii CLI with `console/yii shell`. This will provide a prompt that evaluates PHP code in
+the context of a fully bootstrapped application.  
+In common usage, it is likely preferable to access this via one of the Docker containers
+like `docker exec -it sourcetoad_core_php console/yii shell`. This allows for Docker based routing to the database
+container and the Station/Satellite pair.
 
 ## Features
 
 ### Shell Specific Commands
 
-The shell makes available a number of specific commands. 
+The shell makes available a number of specific commands.
 ![help](./assets/help.png)
 
 `dump` provides a well organized and readable dump.  
@@ -27,12 +28,14 @@ An input history is kept locally and can be navigated via the arrow keys, simila
 ## Caveats
 
 While classes are autoloaded they must be referenced via full namespaces. If working in a particular namespace this can
-be assigned.  
-  
-`$asset = new common\modules\media\models\Asset()`  
-  
+be assigned.
+
+```php
+$asset = new common\modules\media\models\Asset()
+```  
+
 versus
-  
+
 ```php
 namespace common\modules\media;
 $asset = new models\Asset();

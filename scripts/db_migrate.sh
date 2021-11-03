@@ -35,7 +35,7 @@ case $DB_MODE in
         fi
 
         echo -n "Copying...! $NEWLINE"
-        mysqldump $DB_EXPORT_FLAGS --user="${DB_USER}" --password="${DB_PASS}" --host="${DB_HOST}" --port="${DB_PORT}" "${DB_NAME}" | mysql $DB_IMPORT_FLAGS --user="${DB_USER}" --password="${DB_PASS}" --host="${DB_HOST}" --port="${DB_TO_PORT}" "${DB_TO_NAME}"
+        mysqldump "$DB_EXPORT_FLAGS" --user="${DB_USER}" --password="${DB_PASS}" --host="${DB_HOST}" --port="${DB_PORT}" "${DB_NAME}" | mysql "$DB_IMPORT_FLAGS" --user="${DB_USER}" --password="${DB_PASS}" --host="${DB_HOST}" --port="${DB_TO_PORT}" "${DB_TO_NAME}"
         echo -n "Copied...! $NEWLINE"
     ;;
 
