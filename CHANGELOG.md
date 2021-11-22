@@ -1,3 +1,7 @@
+_Deprecated. All future changelogs in [GitHub Release](https://github.com/sourcetoad/DevopsToolKit/releases)_
+
+---
+
 # v1.3.0 (November 9, 2020)
 * Retire non `st-internal` network names (not yet removed).
 * Remove outdated python and upsource documentation.
