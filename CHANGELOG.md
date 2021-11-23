@@ -1,4 +1,5 @@
-_Deprecated. All future changelogs in [GitHub Releases](https://github.com/sourcetoad/DevopsToolKit/releases)._
+# Deprecated
+_All future changelogs in [GitHub Releases](https://github.com/sourcetoad/DevopsToolKit/releases)._
 
 ---
 
