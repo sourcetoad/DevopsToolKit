@@ -1,11 +1,11 @@
-# PHPStorm & Docker
+# PhpStorm & Docker
 
-The goal for this tutorial is to help containerize an application to leverage the tools within PHPStorm (Test Suite,
+The goal for this tutorial is to help containerize an application to leverage the tools within PhpStorm (Test Suite,
 Coverage, etc).
 
 To do this the following things need to happen:
 
-1) Setup Docker for Mac in PHPStorm.
+1) Setup Docker for Mac in PhpStorm.
 2) Setup Language (PHP in this example) to use a remote interpreter.
 3) Fix the paths to match our standard (/code for project code)
 4) Setup Tests (PHPUnit or Codeception) to use a special docker-compose file.
@@ -16,7 +16,7 @@ We are assuming the following things:
 2) The project is already running via (docker-compose up --build)
 3) Some small knowledge of Docker
 
-## Setup Docker for Mac in PHPStorm
+## Setup Docker for Mac in PhpStorm
 
 Head to Preferences and go to `Build, Execution, Deployment -> Docker`. Create an item called "Docker"
 using the daemon option "Docker for Mac".
@@ -25,7 +25,7 @@ using the daemon option "Docker for Mac".
 
 ### Creating an isolated docker-compose for testing
 
-In order for PHPStorm to run tests without affecting containers. You need to create a new container that matches
+In order for PhpStorm to run tests without affecting containers. You need to create a new container that matches
 whatever container your code works on.
 
 For example, here a random PHP project `docker-compose-phpstorm.yml` file.
@@ -102,4 +102,4 @@ This can be shown below:
 
 ![phpstorm-seeing-green-test](./assets/docker-testpass.png)
 
-With that you have successfully hooked the test suites, while keeping Docker inside PHPStorm.
+With that you have successfully hooked the test suites, while keeping Docker inside PhpStorm.

@@ -28,7 +28,7 @@ docker system prune
   * `username: mariadb_user`
   * `password: mariadb_pass`
 
-## Running Xdebug with PHPStorm alongside Docker
+## Running Xdebug with PhpStorm alongside Docker
 From Docker versions 18.03 and above, Docker creates a special DNS name that resolves
 to the internal IP address used by the host.
 
