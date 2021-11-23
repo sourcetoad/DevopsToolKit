@@ -58,5 +58,5 @@ Inside the `scripts` folder you will find one-off scripts to help with tasks.
 
 ## Docs
 * [Setting up Nginx-Proxy](docs/nginx-proxy/README.md)
-* [Setting up PHP Testing in PHPStorm](docs/phpstorm-docker/README.md)
+* [Setting up PHP Testing in PhpStorm](docs/phpstorm-docker/README.md)
 * [Leveraging Yii2 Shell](docs/yii2/yii-shell.md)
