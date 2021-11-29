@@ -24,9 +24,6 @@ docker system prune
 
 ## Passwords
 
-* PostgreSQL
-  * `username: postgres_user`
-  * `password: postgres_pass`
 * MariaDB
   * `username: mariadb_user`
   * `password: mariadb_pass`
