@@ -16,22 +16,6 @@ services:
       - ./proxy_increase.conf:/etc/nginx/proxy.conf
     networks:
      - st-internal
-  postgres94:
-    image: postgres:9.4
-    container_name: sourcetoad_postgres94
-    ports:
-      - "5494:5432"
-    environment:
-      - POSTGRES_USER=postgres_user
-      - POSTGRES_PASSWORD=postgres_pass
-    networks:
-      - st-internal
-    command: "postgres
-                -c logging_collector='on'
-                -c log_directory='/var/log/postgresql'
-                -c log_filename='%Y-%m-%d.log'
-                -c log_line_prefix='%t %v '
-                -c log_statement='all'"
   mariadb105:
     image: mariadb:10.5
     container_name: sourcetoad_mariadb105
