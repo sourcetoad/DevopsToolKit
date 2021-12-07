@@ -1,4 +1,4 @@
-FROM php:8.0-fpm
+FROM php:8.1-fpm
 
 # System dependencies needed
 RUN apt-get update && apt-get install --no-install-recommends -y \
