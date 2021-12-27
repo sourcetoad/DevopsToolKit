@@ -18,7 +18,7 @@ services:
     # PHP Container
     # The environment variables allow Xdebug to work properly.
     # Networks much like above can be registered depending on what the app
-    # requires. In this case, redis and MariaDB.
+    # requires. In this case, MariaDB.
     ProjectName-php:
         container_name: sourcetoad_ProjectName_php
         environment:
