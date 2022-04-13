@@ -10,7 +10,6 @@ DB_USER='root'
 DB_PASS='root'
 DB_EXPORT_FLAGS='--routines --quick --hex-blob --single-transaction'
 
-
 # Determine DB
 echo "Welcome to the SDIT DB Migrator (mysql/postgres) $NEWLINE"
 read -rp "Select (mysql|postgres):" DB_MODE
@@ -24,7 +23,6 @@ read -rp "Enter (TO) database name: " DB_TO_NAME
 # and extract "sourcetoad_mariadb102"
 CONTAINER_NAME_FROM=$(docker ps | grep "$DB_PORT" | rev | cut -d" " -f1 | rev)
 CONTAINER_NAME_TO=$(docker ps | grep "$DB_TO_PORT" | rev | cut -d" " -f1 | rev)
-
 
 case $DB_MODE in
     mysql|maria|mariadb)
