@@ -10,15 +10,21 @@ DB_USER='root'
 DB_PASS='root'
 DB_EXPORT_FLAGS='--routines --quick --hex-blob --single-transaction'
 
+
 # Determine DB
 echo "Welcome to the SDIT DB Migrator (mysql/postgres) $NEWLINE"
 read -rp "Select (mysql|postgres):" DB_MODE
-read -rp "Select (FROM) docker container name: " CONTAINER_NAME_FROM
 read -rp "Enter (FROM) port number:" DB_PORT
 read -rp "Enter (FROM) database name: " DB_NAME
-read -rp "Select (to) docker container name: " CONTAINER_NAME_TO
 read -rp "Enter (TO) port number:" DB_TO_PORT
 read -rp "Enter (TO) database name: " DB_TO_NAME
+
+# Given the output of "docker ps" and a port, can find a matching line of:
+# 6eabb950ac3f   mariadb:10.2  "docker-entrypoint.s…" 2 weeks ago Up 30 hours 0.0.0.0:33102->3306/tcp sourcetoad_mariadb102
+# and extract "sourcetoad_mariadb102"
+CONTAINER_NAME_FROM=$(docker ps | grep "$DB_PORT" | rev | cut -d" " -f1 | rev)
+CONTAINER_NAME_TO=$(docker ps | grep "$DB_TO_PORT" | rev | cut -d" " -f1 | rev)
+
 
 case $DB_MODE in
     mysql|maria|mariadb)
@@ -36,7 +42,7 @@ case $DB_MODE in
         fi
 
         echo -n "Copying...! $NEWLINE"
-	# shellcheck disable=SC2086
+        # shellcheck disable=SC2086
         docker exec -i "$CONTAINER_NAME_FROM" mysqldump $DB_EXPORT_FLAGS --user="${DB_USER}" --password="${DB_PASS}" --port="${DB_PORT}" --databases "${DB_NAME}" | docker exec -i "$CONTAINER_NAME_TO" mysql --user="${DB_USER}" --password="${DB_PASS}" --port="${DB_TO_PORT}" "${DB_TO_NAME}"
         echo -n "Copied...! $NEWLINE"
     ;;
