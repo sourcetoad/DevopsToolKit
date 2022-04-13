@@ -8,14 +8,15 @@ DB_PORT=''
 DB_HOST='127.0.0.1'
 DB_USER='root'
 DB_PASS='root'
-DB_EXPORT_FLAGS='--routines --column-statistics=0 --quick --hex-blob --single-transaction'
-DB_IMPORT_FLAGS=''
+DB_EXPORT_FLAGS='--routines --quick --hex-blob --single-transaction'
 
 # Determine DB
 echo "Welcome to the SDIT DB Migrator (mysql/postgres) $NEWLINE"
 read -rp "Select (mysql|postgres):" DB_MODE
+read -rp "Select (FROM) docker container name: " CONTAINER_NAME_FROM
 read -rp "Enter (FROM) port number:" DB_PORT
 read -rp "Enter (FROM) database name: " DB_NAME
+read -rp "Select (to) docker container name: " CONTAINER_NAME_TO
 read -rp "Enter (TO) port number:" DB_TO_PORT
 read -rp "Enter (TO) database name: " DB_TO_NAME
 
@@ -35,7 +36,8 @@ case $DB_MODE in
         fi
 
         echo -n "Copying...! $NEWLINE"
-        mysqldump "$DB_EXPORT_FLAGS" --user="${DB_USER}" --password="${DB_PASS}" --host="${DB_HOST}" --port="${DB_PORT}" "${DB_NAME}" | mysql "$DB_IMPORT_FLAGS" --user="${DB_USER}" --password="${DB_PASS}" --host="${DB_HOST}" --port="${DB_TO_PORT}" "${DB_TO_NAME}"
+	# shellcheck disable=SC2086
+        docker exec -i "$CONTAINER_NAME_FROM" mysqldump $DB_EXPORT_FLAGS --user="${DB_USER}" --password="${DB_PASS}" --port="${DB_PORT}" --databases "${DB_NAME}" | docker exec -i "$CONTAINER_NAME_TO" mysql --user="${DB_USER}" --password="${DB_PASS}" --port="${DB_TO_PORT}" "${DB_TO_NAME}"
         echo -n "Copied...! $NEWLINE"
     ;;
 
@@ -50,3 +52,4 @@ case $DB_MODE in
 esac
 
 exit 0
+
