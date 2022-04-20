@@ -20,9 +20,9 @@ read -rp "Enter (TO) database name: " DB_TO_NAME
 
 # Given the output of "docker ps" and a port, can find a matching line of:
 # 6eabb950ac3f   mariadb:10.2  "docker-entrypoint.s…" 2 weeks ago Up 30 hours 0.0.0.0:33102->3306/tcp sourcetoad_mariadb102
-# and extract "sourcetoad_mariadb102"
-CONTAINER_NAME_FROM=$(docker ps | grep "$DB_PORT" | rev | cut -d" " -f1 | rev)
-CONTAINER_NAME_TO=$(docker ps | grep "$DB_TO_PORT" | rev | cut -d" " -f1 | rev)
+# and extract the container name (ex: "sourcetoad_mariadb102")
+CONTAINER_NAME_FROM=$(docker ps --format '{{.Names}} {{.Ports}}' | grep "$DB_PORT" | cut -d ' ' -f1)
+CONTAINER_NAME_TO=$(docker ps --format '{{.Names}} {{.Ports}}' | grep "$DB_TO_PORT" | cut -d ' ' -f1)
 
 case $DB_MODE in
     mysql|maria|mariadb)
