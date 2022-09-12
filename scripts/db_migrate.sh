@@ -9,6 +9,7 @@ DB_HOST='127.0.0.1'
 DB_USER='root'
 DB_PASS='root'
 DB_EXPORT_FLAGS='--routines --quick --hex-blob --single-transaction'
+DB_IMPORT_FLAGS='--protocol=socket'
 
 # Determine DB
 echo "Welcome to the SDIT DB Migrator (mysql/postgres) $NEWLINE"
@@ -41,7 +42,7 @@ case $DB_MODE in
 
         echo -n "Copying...! $NEWLINE"
         # shellcheck disable=SC2086
-        docker exec -i "$CONTAINER_NAME_FROM" mysqldump $DB_EXPORT_FLAGS --user="${DB_USER}" --password="${DB_PASS}" --port="${DB_PORT}" --databases "${DB_NAME}" | docker exec -i "$CONTAINER_NAME_TO" mysql --user="${DB_USER}" --password="${DB_PASS}" --port="${DB_TO_PORT}" "${DB_TO_NAME}"
+        docker exec -i "$CONTAINER_NAME_FROM" mysqldump $DB_EXPORT_FLAGS --user="${DB_USER}" --password="${DB_PASS}" --port="${DB_PORT}" --databases "${DB_NAME}" | docker exec -i "$CONTAINER_NAME_TO" mysql $DB_IMPORT_FLAGS --user="${DB_USER}" --password="${DB_PASS}" --port="${DB_TO_PORT}" "${DB_TO_NAME}"
         echo -n "Copied...! $NEWLINE"
     ;;
 
