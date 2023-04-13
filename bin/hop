@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-HOP_PATH=$(dirname "$BASH_SOURCE[0]")
+HOP_PATH=$(dirname "${BASH_SOURCE[0]}")
 TOOLKIT_PATH=$(dirname "$HOP_PATH")
 
 #
@@ -59,7 +59,7 @@ function join {
 
 function describe_command {
     local COMMAND_NAME=$1
-    local ARGS_LIST=${@:2:(($# - 2))}
+    local ARGS_LIST=${*:2:(($# - 2))}
     local DESCRIPTION=${!#}
     local CONTENT_LENGTH=$((${#COMMAND_NAME} + ${#ARGS_LIST} + ${#DESCRIPTION}))
 
@@ -76,7 +76,7 @@ function describe_command {
     SEGMENTS+=("${FG_N}${DOTS}")
     SEGMENTS+=("${FG_N}${DESCRIPTION}")
 
-    join " " "${SEGMENTS[@]}${RESET}"
+    join " " "${SEGMENTS[@]}" "${RESET}"
 }
 
 function tag {
@@ -398,7 +398,7 @@ case $1 in
         run_exec_command yarn "$@"
         ;;
     *)
-        output_error "Unknown command: hop $@"
+        output_error "Unknown command: hop $*"
         echo "${FG_N}Try: 'hop help'${RESET}" >&2
         exit 1
         ;;
