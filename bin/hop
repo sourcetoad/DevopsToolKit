@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-HOP_PATH=$(dirname "${BASH_SOURCE[0]}")
+HOP_PATH=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 TOOLKIT_PATH=$(dirname "$HOP_PATH")
 
 #
