@@ -72,7 +72,7 @@ function describe_command {
 
     local DOT_COUNT=$((WIDTH - CONTENT_LENGTH - ${#SEGMENTS[@]} - 3 - 1)) # 3 for "hop", 1 for additional space for last segment
     local DOTS
-    DOTS=$(printf '%*s' "$DOT_COUNT" | tr ' ' '.')
+    DOTS=$(printf '%*s' "$DOT_COUNT" "" | tr ' ' '.')
     SEGMENTS+=("${FG_N}${DOTS}")
     SEGMENTS+=("${FG_N}${DESCRIPTION}")
 
@@ -201,7 +201,7 @@ function locate_docker_container {
     local FILE=$1
     for MATCH in "${MATCHES[@]}"; do
         local container
-        container=$(cat "$FILE" | grep "$MATCH" | sed 's/^[ ]*//' | sed 's/:$//')
+        container=$(grep "$MATCH" < $FILE | sed 's/^[ ]*//' | sed 's/:$//')
         if [ -n "$container" ]; then
             echo "$container"
             return
