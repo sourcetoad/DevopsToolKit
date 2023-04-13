@@ -201,7 +201,7 @@ function locate_docker_container {
     local FILE=$1
     for MATCH in "${MATCHES[@]}"; do
         local container
-        container=$(grep "$MATCH" < $FILE | sed 's/^[ ]*//' | sed 's/:$//')
+        container=$(grep "$MATCH" < "$FILE" | sed 's/^[ ]*//' | sed 's/:$//')
         if [ -n "$container" ]; then
             echo "$container"
             return
