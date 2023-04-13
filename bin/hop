@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-HOP_PATH=$(dirname "$BASH_SOURCE")
+HOP_PATH=$(dirname "$BASH_SOURCE[0]")
 TOOLKIT_PATH=$(dirname "$HOP_PATH")
 
 #
@@ -34,14 +34,14 @@ if test -t 1; then
         BG_G="$(tput setab $COLOR_G)" # Background - GREEN
         BG_Y="$(tput setab $COLOR_Y)" # Background - YELLOW
         BG_B="$(tput setab $COLOR_B)" # Background - BLUE
-        BG_M="$(tput setab $COLOR_M)" # Background - MAGENTA
-        BG_C="$(tput setab $COLOR_C)" # Background - CYAN
-        BG_N="$(tput setab $COLOR_N)" # Background - NEUTRAL (GRAY)
+        #BG_M="$(tput setab $COLOR_M)" # Background - MAGENTA
+        #BG_C="$(tput setab $COLOR_C)" # Background - CYAN
+        #BG_N="$(tput setab $COLOR_N)" # Background - NEUTRAL (GRAY)
 
-        FG_R="$(tput setaf $COLOR_R)" # Foreground - RED
-        FG_G="$(tput setaf $COLOR_G)" # Foreground - GREEN
-        FG_Y="$(tput setaf $COLOR_Y)" # Foreground - YELLOW
-        FG_B="$(tput setaf $COLOR_B)" # Foreground - BLUE
+        #FG_R="$(tput setaf $COLOR_R)" # Foreground - RED
+        #FG_G="$(tput setaf $COLOR_G)" # Foreground - GREEN
+        #FG_Y="$(tput setaf $COLOR_Y)" # Foreground - YELLOW
+        #FG_B="$(tput setaf $COLOR_B)" # Foreground - BLUE
         FG_M="$(tput setaf $COLOR_M)" # Foreground - MAGENTA
         FG_C="$(tput setaf $COLOR_C)" # Foreground - CYAN
         FG_N="$(tput setaf $COLOR_N)" # Foreground - NEUTRAL (GRAY)
@@ -70,12 +70,13 @@ function describe_command {
         SEGMENTS+=("${FG_M}${ARGS_LIST}")
     fi
 
-    local DOT_COUNT=$(($WIDTH - $CONTENT_LENGTH - ${#SEGMENTS[@]} - 3 - 1)) # 3 for "hop", 1 for additional space for last segment
-    local DOTS=$(printf '%*s' "$DOT_COUNT" | tr ' ' '.')
+    local DOT_COUNT=$((WIDTH - CONTENT_LENGTH - ${#SEGMENTS[@]} - 3 - 1)) # 3 for "hop", 1 for additional space for last segment
+    local DOTS
+    DOTS=$(printf '%*s' "$DOT_COUNT" | tr ' ' '.')
     SEGMENTS+=("${FG_N}${DOTS}")
     SEGMENTS+=("${FG_N}${DESCRIPTION}")
 
-    join " " ${SEGMENTS[@]}${RESET}
+    join " " "${SEGMENTS[@]}${RESET}"
 }
 
 function tag {
@@ -83,32 +84,32 @@ function tag {
     local LABEL=$2
     shift 2
 
-    echo $@ "${STYLE}  ${LABEL}  ${RESET} "
+    echo "$@" "${STYLE}  ${LABEL}  ${RESET} "
 }
 
 function output_error {
-    tag $BG_R "ERROR" -n
-    echo $1
+    tag "$BG_R" "ERROR" -n
+    echo "$1"
 }
 
 EXPLAIN_COUNT=0
 function explain {
-    EXPLAIN_COUNT=$(($EXPLAIN_COUNT + 1))
-    tag $BG_B "COMMAND #${EXPLAIN_COUNT}" -n
-    echo $@
+    EXPLAIN_COUNT=$((EXPLAIN_COUNT + 1))
+    tag "$BG_B" "COMMAND #${EXPLAIN_COUNT}" -n
+    echo "$@"
 }
 
 #
 # Display Help
 #
 function display_help {
-    tag $BG_G$BOLD "Sourcetoad Hop"
+    tag "$BG_G$BOLD" "Sourcetoad Hop"
     echo "A script that makes it easy to hop into your project containers and run commands."
     echo
-    tag $BG_Y$BOLD "Usage" 
+    tag "$BG_Y$BOLD" "Usage"
     echo "hop ${FG_C}COMMAND ${FG_M}[options] [arguments]${RESET}"
     echo
-    tag $BG_Y$BOLD "Docker Commands" 
+    tag "$BG_Y$BOLD" "Docker Commands"
     describe_command "up" "Start the containers"
     describe_command "up" "-d" "Start the contains in the background"
     describe_command "stop" "Stop the containers"
@@ -116,7 +117,7 @@ function display_help {
     describe_command "restart" "Restart the containers"
     describe_command "ps" "Display the status of the containers"
     echo
-    tag $BG_Y$BOLD "Passthroughs"
+    tag "$BG_Y$BOLD" "Passthroughs"
     describe_command "artisan" "\$@" "Run an artisan command inside the project's code container"
     describe_command "composer" "\$@" "Run a composer command inside the project's code container"
     describe_command "docker" "\$@" "Run a docker compose command"
@@ -129,11 +130,11 @@ function display_help {
     describe_command "pint" "\$@" "Run a pint command inside the project's code container"
     describe_command "yarn" "\$@" "Run a yarn command inside the project's code container"
     echo
-    tag $BG_Y$BOLD "Utilities"
+    tag "$BG_Y$BOLD" "Utilities"
     describe_command "explain" "Output the command that would be exected by hop"
     describe_command "in" "Start a shell session within the project's code container"
     echo
-    tag $BG_Y$BOLD "Aliases"
+    tag "$BG_Y$BOLD" "Aliases"
     describe_command "art" "hop artisan"
     describe_command "autoload" "hop composer dumpautoload"
     describe_command "bash" "hop in"
@@ -142,7 +143,7 @@ function display_help {
     describe_command "shell" "hop in"
     describe_command "status" "hop ps"
     echo
-    tag $BG_Y$BOLD "Artisan Aliases"
+    tag "$BG_Y$BOLD" "Artisan Aliases"
     describe_command "app:*" "hop artisan app:*"
     describe_command "build:*" "hop artisan build:*"
     describe_command "db:*" "hop artisan db:*"
@@ -161,7 +162,7 @@ if [ $# -lt 1 ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "-help" ]
 fi
 
 if [ "$1" == "install" ]; then
-    tag $BG_B$BOLD "INFO" -n
+    tag "$BG_B$BOLD" "INFO" -n
     echo "To Install Hop:"
     echo " - Add '${FG_M}export PATH=\"${HOP_PATH}:\$PATH\"${RESET}' to your ~/.zshrc file."
     exit 0
@@ -178,7 +179,7 @@ else
 fi
 
 docker compose &> /dev/null
-if [ $? == 0 ]; then
+if docker compose &> /dev/null; then
     DOCKER_COMPOSE=(docker compose)
 else
     DOCKER_COMPOSE=(docker-compose)
@@ -186,7 +187,7 @@ fi
 
 function locate_docker_file {
     local POTENTIAL_FILES=("docker/docker-compose.yml" "docker-compose.yml")
-    for file in ${POTENTIAL_FILES[@]}; do
+    for file in "${POTENTIAL_FILES[@]}"; do
         if [ -f "$file" ]; then
             echo "$file"
             return
@@ -198,8 +199,9 @@ DOCKER_FILE=$(locate_docker_file)
 function locate_docker_container {
     local MATCHES=("\-php:" "\-code:")
     local FILE=$1
-    for MATCH in ${MATCHES[@]}; do
-        local container=$(cat "$FILE" | grep "$MATCH" | sed 's/^[ ]*//' | sed 's/:$//')
+    for MATCH in "${MATCHES[@]}"; do
+        local container
+        container=$(cat "$FILE" | grep "$MATCH" | sed 's/^[ ]*//' | sed 's/:$//')
         if [ -n "$container" ]; then
             echo "$container"
             return
@@ -242,7 +244,7 @@ fi
 
 function run_command {
     if [ "$EXPLAIN" == "yes" ]; then
-        explain "${DOCKER_COMPOSE[@]} $@"
+        explain "${DOCKER_COMPOSE[@]}" "$@"
     elif [ "$EXEC" == "yes" ] || [ "$1" == "up" ]; then
         "${DOCKER_COMPOSE[@]}" "$@"
     else
@@ -253,7 +255,7 @@ function run_command {
 
 function run_dss_command {
     if [ "$EXPLAIN" == "yes" ]; then
-        explain "${DOCKER_COMPOSE_DSS[@]} ${@}"
+        explain "${DOCKER_COMPOSE_DSS[@]}" "$@"
     else
         "${DOCKER_COMPOSE_DSS[@]}" "${@}"
     fi
@@ -262,9 +264,9 @@ function run_dss_command {
 function run_exec_command {
     ARGS+=(exec)
     [ ! -t 0 ] && ARGS+=(--no-TTY)
-    ARGS+=("$APP_SERVICE" $@)
+    ARGS+=("$APP_SERVICE" "$@")
 
-    run_command ${ARGS[@]}
+    run_command "${ARGS[@]}"
 }
 
 #
@@ -301,66 +303,66 @@ fi
 
 case $1 in
     "app:"*|"build:"*|"db:"*|"make:"*|"queue:"*)
-        run_exec_command php artisan $@
+        run_exec_command php artisan "$@"
         ;;
     "art"|"artisan")
         shift 1
-        run_exec_command php artisan $@
+        run_exec_command php artisan "$@"
         ;;
     "autoload")
         shift 1
-        run_exec_command composer dumpautoload $@
+        run_exec_command composer dumpautoload "$@"
         ;;
     "bash"|"in"|"shell")
         shift 1
-        run_exec_command bash $@
+        run_exec_command bash "$@"
         ;;
     "composer")
         shift 1
-        run_exec_command composer $@
+        run_exec_command composer "$@"
         ;;
     "docker")
         shift 1
-        run_command $@
+        run_command "$@"
         ;;
     "down"|"stop"|"restart")
-        run_command $@
+        run_command "$@"
         ;;
     "fresh")
         shift 1
-        run_exec_command php artisan migrate:fresh $@
+        run_exec_command php artisan migrate:fresh "$@"
         ;;
     "migrate")
         shift 1
-        run_exec_command php artisan migrate $@
+        run_exec_command php artisan migrate "$@"
         ;;
     "node")
         shift 1
-        run_exec_command node $@
+        run_exec_command node "$@"
         ;;
     "npm")
         shift 1
-        run_exec_command npm $@
+        run_exec_command npm "$@"
         ;;
     "npx")
         shift 1
-        run_exec_command npx $@
+        run_exec_command npx "$@"
         ;;
     "php")
         shift 1
-        run_exec_command php $@
+        run_exec_command php "$@"
         ;;
     "phpstan")
         shift 1
-        run_exec_command php vendor/bin/phpstan $@
+        run_exec_command php vendor/bin/phpstan "$@"
         ;;
     "phpunit")
         shift 1
-        run_exec_command php vendor/bin/phpunit $@
+        run_exec_command php vendor/bin/phpunit "$@"
         ;;
     "pint")
         shift 1
-        run_exec_command php vendor/bin/pint $@
+        run_exec_command php vendor/bin/pint "$@"
         ;;
     "pint-check")
         shift 1
@@ -372,28 +374,28 @@ case $1 in
         ;;
     "ps"|"status")
         shift 1
-        run_command ps $@
+        run_command ps "$@"
         ;;
     "seed")
         shift 1
-        run_exec_command php artisan db:seed $@
+        run_exec_command php artisan db:seed "$@"
         ;;
     "test")
         shift 1
-        run_exec_command php artisan test $@
+        run_exec_command php artisan test "$@"
         ;;
     "tinker")
         shift 1
-        run_exec_command php artisan tinker $@
+        run_exec_command php artisan tinker "$@"
         ;;
     "up")
         shift 1
         run_dss_command up -d
-        run_command up $@
+        run_command up "$@"
         ;;
     "yarn")
         shift 1
-        run_exec_command yarn $@
+        run_exec_command yarn "$@"
         ;;
     *)
         output_error "Unknown command: hop $@"
