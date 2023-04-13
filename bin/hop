@@ -131,7 +131,7 @@ function display_help {
     describe_command "yarn" "\$@" "Run a yarn command inside the project's code container"
     echo
     tag "$BG_Y$BOLD" "Utilities"
-    describe_command "explain" "Output the command that would be exected by hop"
+    describe_command "explain" "Output the command that would be executed by hop"
     describe_command "in" "Start a shell session within the project's code container"
     echo
     tag "$BG_Y$BOLD" "Aliases"
