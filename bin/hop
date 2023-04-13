@@ -125,6 +125,8 @@ function display_help {
     describe_command "npm" "\$@" "Run an npm command inside the project's code container"
     describe_command "npx" "\$@" "Run an npx command inside the project's code container"
     describe_command "php" "\$@" "Run a php command inside the project's code container"
+    describe_command "phpcbf" "\$@" "Run a phpcbf command inside the project's code container"
+    describe_command "phpcs" "\$@" "Run a phpcs command inside the project's code container"
     describe_command "phpstan" "\$@" "Run a phpstan command inside the project's code container"
     describe_command "phpunit" "\$@" "Run a phpunit command inside the project's code container"
     describe_command "pint" "\$@" "Run a pint command inside the project's code container"
@@ -138,6 +140,7 @@ function display_help {
     describe_command "art" "hop artisan"
     describe_command "autoload" "hop composer dumpautoload"
     describe_command "bash" "hop in"
+    describe_command "phpcs-fix" "hop phpcbf"
     describe_command "pint-check" "hop pint --test -v"
     describe_command "pint-fix" "hop pint"
     describe_command "shell" "hop in"
@@ -351,6 +354,14 @@ case $1 in
     "php")
         shift 1
         run_exec_command php "$@"
+        ;;
+    "phpcbf"|"phpcs-fix")
+        shift 1
+        run_exec_command php vendor/bin/phpcbf "$@"
+        ;;
+    "phpcs")
+        shift 1
+        run_exec_command php vendor/bin/phpcs "$@"
         ;;
     "phpstan")
         shift 1
