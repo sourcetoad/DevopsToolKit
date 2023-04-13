@@ -1,0 +1,405 @@
+#!/usr/bin/env bash
+
+HOP_PATH=$(dirname "$BASH_SOURCE")
+TOOLKIT_PATH=$(dirname "$HOP_PATH")
+
+#
+# Script Output
+#
+
+# Determine width of the program
+ACTUAL_WIDTH=$(($(tput cols) - 2))
+MAX_WIDTH=100
+
+if test "$ACTUAL_WIDTH" -gt "$MAX_WIDTH"; then
+    WIDTH=$MAX_WIDTH
+else
+    WIDTH=$ACTUAL_WIDTH
+fi
+
+# Setup Color Outputs
+if test -t 1; then
+    ncolors=$(tput colors)
+
+    if test -n "$ncolors" && test "$ncolors" -ge 8; then
+        COLOR_R=1   # color code - RED
+        COLOR_G=2   # color code - GREEN
+        COLOR_Y=3   # color code - YELLOW
+        COLOR_B=4   # color code - BLUE
+        COLOR_M=5   # color code - MAGENTA
+        COLOR_C=6   # color code - CYAN
+        COLOR_N=246 # color code - NEUTRAL (GRAY)
+
+        BG_R="$(tput setab $COLOR_R)" # Background - RED
+        BG_G="$(tput setab $COLOR_G)" # Background - GREEN
+        BG_Y="$(tput setab $COLOR_Y)" # Background - YELLOW
+        BG_B="$(tput setab $COLOR_B)" # Background - BLUE
+        BG_M="$(tput setab $COLOR_M)" # Background - MAGENTA
+        BG_C="$(tput setab $COLOR_C)" # Background - CYAN
+        BG_N="$(tput setab $COLOR_N)" # Background - NEUTRAL (GRAY)
+
+        FG_R="$(tput setaf $COLOR_R)" # Foreground - RED
+        FG_G="$(tput setaf $COLOR_G)" # Foreground - GREEN
+        FG_Y="$(tput setaf $COLOR_Y)" # Foreground - YELLOW
+        FG_B="$(tput setaf $COLOR_B)" # Foreground - BLUE
+        FG_M="$(tput setaf $COLOR_M)" # Foreground - MAGENTA
+        FG_C="$(tput setaf $COLOR_C)" # Foreground - CYAN
+        FG_N="$(tput setaf $COLOR_N)" # Foreground - NEUTRAL (GRAY)
+    
+        BOLD="$(tput bold)"
+        RESET="$(tput sgr0)"
+    fi
+fi
+
+function join {
+    local IFS="$1"
+    shift
+    echo "$*"
+}
+
+function describe_command {
+    local COMMAND_NAME=$1
+    local ARGS_LIST=${@:2:(($# - 2))}
+    local DESCRIPTION=${!#}
+    local CONTENT_LENGTH=$((${#COMMAND_NAME} + ${#ARGS_LIST} + ${#DESCRIPTION}))
+
+    local SEGMENTS=("hop")
+    SEGMENTS+=("${FG_C}${COMMAND_NAME}")
+
+    if test $# -gt 2; then
+        SEGMENTS+=("${FG_M}${ARGS_LIST}")
+    fi
+
+    local DOT_COUNT=$(($WIDTH - $CONTENT_LENGTH - ${#SEGMENTS[@]} - 3 - 1)) # 3 for "hop", 1 for additional space for last segment
+    local DOTS=$(printf '%*s' "$DOT_COUNT" | tr ' ' '.')
+    SEGMENTS+=("${FG_N}${DOTS}")
+    SEGMENTS+=("${FG_N}${DESCRIPTION}")
+
+    join " " ${SEGMENTS[@]}${RESET}
+}
+
+function tag {
+    local STYLE=$1
+    local LABEL=$2
+    shift 2
+
+    echo $@ "${STYLE}  ${LABEL}  ${RESET} "
+}
+
+function output_error {
+    tag $BG_R "ERROR" -n
+    echo $1
+}
+
+EXPLAIN_COUNT=0
+function explain {
+    EXPLAIN_COUNT=$(($EXPLAIN_COUNT + 1))
+    tag $BG_B "COMMAND #${EXPLAIN_COUNT}" -n
+    echo $@
+}
+
+#
+# Display Help
+#
+function display_help {
+    tag $BG_G$BOLD "Sourcetoad Hop"
+    echo "A script that makes it easy to hop into your project containers and run commands."
+    echo
+    tag $BG_Y$BOLD "Usage" 
+    echo "hop ${FG_C}COMMAND ${FG_M}[options] [arguments]${RESET}"
+    echo
+    tag $BG_Y$BOLD "Docker Commands" 
+    describe_command "up" "Start the containers"
+    describe_command "up" "-d" "Start the contains in the background"
+    describe_command "stop" "Stop the containers"
+    describe_command "down" "Stop and remove the containers"
+    describe_command "restart" "Restart the containers"
+    describe_command "ps" "Display the status of the containers"
+    echo
+    tag $BG_Y$BOLD "Passthroughs"
+    describe_command "artisan" "\$@" "Run an artisan command inside the project's code container"
+    describe_command "composer" "\$@" "Run a composer command inside the project's code container"
+    describe_command "docker" "\$@" "Run a docker compose command"
+    describe_command "node" "\$@" "Run a node command inside the project's code container"
+    describe_command "npm" "\$@" "Run an npm command inside the project's code container"
+    describe_command "npx" "\$@" "Run an npx command inside the project's code container"
+    describe_command "php" "\$@" "Run a php command inside the project's code container"
+    describe_command "phpstan" "\$@" "Run a phpstan command inside the project's code container"
+    describe_command "phpunit" "\$@" "Run a phpunit command inside the project's code container"
+    describe_command "pint" "\$@" "Run a pint command inside the project's code container"
+    describe_command "yarn" "\$@" "Run a yarn command inside the project's code container"
+    echo
+    tag $BG_Y$BOLD "Utilities"
+    describe_command "explain" "Output the command that would be exected by hop"
+    describe_command "in" "Start a shell session within the project's code container"
+    echo
+    tag $BG_Y$BOLD "Aliases"
+    describe_command "art" "hop artisan"
+    describe_command "autoload" "hop composer dumpautoload"
+    describe_command "bash" "hop in"
+    describe_command "pint-check" "hop pint --test -v"
+    describe_command "pint-fix" "hop pint"
+    describe_command "shell" "hop in"
+    describe_command "status" "hop ps"
+    echo
+    tag $BG_Y$BOLD "Artisan Aliases"
+    describe_command "app:*" "hop artisan app:*"
+    describe_command "build:*" "hop artisan build:*"
+    describe_command "db:*" "hop artisan db:*"
+    describe_command "fresh" "hop artisan migrate:fresh"
+    describe_command "make:*" "hop artisan make:*"
+    describe_command "migrate" "hop artisan migrate"
+    describe_command "queue:*" "hop artisan queue:*"
+    describe_command "seed" "hop artisan db:seed"
+    describe_command "test" "hop artisan test"
+    describe_command "tinker" "hop artisan tinker"
+}
+
+if [ $# -lt 1 ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "-help" ] || [ "$1" == "--help" ]; then
+    display_help
+    exit 0
+fi
+
+if [ "$1" == "install" ]; then
+    tag $BG_B$BOLD "INFO" -n
+    echo "To Install Hop:"
+    echo " - Add '${FG_M}export PATH=\"${HOP_PATH}:\$PATH\"${RESET}' to your ~/.zshrc file."
+    exit 0
+fi
+
+#
+# Docker State
+#
+
+if ! docker info > /dev/null 2>&1; then
+    DOCKER_RUNNING="no"
+else
+    DOCKER_RUNNING="yes"
+fi
+
+docker compose &> /dev/null
+if [ $? == 0 ]; then
+    DOCKER_COMPOSE=(docker compose)
+else
+    DOCKER_COMPOSE=(docker-compose)
+fi
+
+function locate_docker_file {
+    local POTENTIAL_FILES=("docker/docker-compose.yml" "docker-compose.yml")
+    for file in ${POTENTIAL_FILES[@]}; do
+        if [ -f "$file" ]; then
+            echo "$file"
+            return
+        fi
+    done
+}
+DOCKER_FILE=$(locate_docker_file)
+
+function locate_docker_container {
+    local MATCHES=("\-php:" "\-code:")
+    local FILE=$1
+    for MATCH in ${MATCHES[@]}; do
+        local container=$(cat "$FILE" | grep "$MATCH" | sed 's/^[ ]*//' | sed 's/:$//')
+        if [ -n "$container" ]; then
+            echo "$container"
+            return
+        fi
+    done
+}
+if [ "$DOCKER_FILE" ]; then
+    APP_SERVICE=$(locate_docker_container "$DOCKER_FILE")
+fi
+
+#
+# Data Source Services
+#
+
+function locate_data_source_services_docker_file {
+    if [ -f "$TOOLKIT_PATH/docker/data-source-services/docker-compose.yml" ]; then
+        echo "$TOOLKIT_PATH/docker/data-source-services/docker-compose.yml"
+        return
+    fi
+}
+
+DATA_SOURCE_SERVICE=$(locate_data_source_services_docker_file)
+DOCKER_COMPOSE_DSS=("${DOCKER_COMPOSE[@]}")
+DOCKER_COMPOSE_DSS+=(-f "$DATA_SOURCE_SERVICE")
+
+#
+# Support Docker Compose Override
+#
+if [ "$DOCKER_FILE" ]; then
+    DOCKER_COMPOSE+=(-f "$DOCKER_FILE")
+    DOCKER_COMPOSE_OVERRIDE="$(dirname "$DOCKER_FILE")/docker-compose.override.yml"
+    if [ -f "$DOCKER_COMPOSE_OVERRIDE" ]; then
+        DOCKER_COMPOSE+=(-f "$DOCKER_COMPOSE_OVERRIDE")
+    fi
+fi
+
+#
+# Running Commands
+#
+
+function run_command {
+    if [ "$EXPLAIN" == "yes" ]; then
+        explain "${DOCKER_COMPOSE[@]} $@"
+    elif [ "$EXEC" == "yes" ] || [ "$1" == "up" ]; then
+        "${DOCKER_COMPOSE[@]}" "$@"
+    else
+        output_error "Container is not running." >&2
+        echo "${FG_N}Try: 'hop up' or 'hop up -d'${RESET}" >&2
+    fi
+}
+
+function run_dss_command {
+    if [ "$EXPLAIN" == "yes" ]; then
+        explain "${DOCKER_COMPOSE_DSS[@]} ${@}"
+    else
+        "${DOCKER_COMPOSE_DSS[@]}" "${@}"
+    fi
+}
+
+function run_exec_command {
+    ARGS+=(exec)
+    [ ! -t 0 ] && ARGS+=(--no-TTY)
+    ARGS+=("$APP_SERVICE" $@)
+
+    run_command ${ARGS[@]}
+}
+
+#
+# Execute
+#
+
+if [ -z "$DOCKER_FILE" ]; then
+    output_error "Unable to find the docker compose file." >&2
+    exit 1
+fi
+
+if [ -z "$APP_SERVICE" ]; then
+    output_error "Unable to find container name." >&2
+    exit 1
+fi
+
+if [ "${DOCKER_RUNNING}" == "no" ]; then
+    output_error "Docker is not running." >&2
+    exit 1
+fi
+
+EXEC="yes"
+if "${DOCKER_COMPOSE[@]}" ps "$APP_SERVICE" 2>&1 | grep 'Exit\|exited'; then
+    EXEC="no"
+elif [ -z "$("${DOCKER_COMPOSE[@]}" ps -q)" ]; then
+    EXEC="no"
+fi
+
+EXPLAIN="no"
+if [ "$1" == "explain" ]; then
+    EXPLAIN="yes"
+    shift 1
+fi
+
+case $1 in
+    "app:"*|"build:"*|"db:"*|"make:"*|"queue:"*)
+        run_exec_command php artisan $@
+        ;;
+    "art"|"artisan")
+        shift 1
+        run_exec_command php artisan $@
+        ;;
+    "autoload")
+        shift 1
+        run_exec_command composer dumpautoload $@
+        ;;
+    "bash"|"in"|"shell")
+        shift 1
+        run_exec_command bash $@
+        ;;
+    "composer")
+        shift 1
+        run_exec_command composer $@
+        ;;
+    "docker")
+        shift 1
+        run_command $@
+        ;;
+    "down"|"stop"|"restart")
+        run_command $@
+        ;;
+    "fresh")
+        shift 1
+        run_exec_command php artisan migrate:fresh $@
+        ;;
+    "migrate")
+        shift 1
+        run_exec_command php artisan migrate $@
+        ;;
+    "node")
+        shift 1
+        run_exec_command node $@
+        ;;
+    "npm")
+        shift 1
+        run_exec_command npm $@
+        ;;
+    "npx")
+        shift 1
+        run_exec_command npx $@
+        ;;
+    "php")
+        shift 1
+        run_exec_command php $@
+        ;;
+    "phpstan")
+        shift 1
+        run_exec_command php vendor/bin/phpstan $@
+        ;;
+    "phpunit")
+        shift 1
+        run_exec_command php vendor/bin/phpunit $@
+        ;;
+    "pint")
+        shift 1
+        run_exec_command php vendor/bin/pint $@
+        ;;
+    "pint-check")
+        shift 1
+        run_exec_command php vendor/bin/pint --test -v
+        ;;
+    "pint-fix")
+        shift 1
+        run_exec_command php vendor/bin/pint
+        ;;
+    "ps"|"status")
+        shift 1
+        run_command ps $@
+        ;;
+    "seed")
+        shift 1
+        run_exec_command php artisan db:seed $@
+        ;;
+    "test")
+        shift 1
+        run_exec_command php artisan test $@
+        ;;
+    "tinker")
+        shift 1
+        run_exec_command php artisan tinker $@
+        ;;
+    "up")
+        shift 1
+        run_dss_command up -d
+        run_command up $@
+        ;;
+    "yarn")
+        shift 1
+        run_exec_command yarn $@
+        ;;
+    *)
+        output_error "Unknown command: hop $@"
+        echo "${FG_N}Try: 'hop help'${RESET}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
