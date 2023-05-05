@@ -45,7 +45,7 @@ if test -t 1; then
         FG_M="$(tput setaf $COLOR_M)" # Foreground - MAGENTA
         FG_C="$(tput setaf $COLOR_C)" # Foreground - CYAN
         FG_N="$(tput setaf $COLOR_N)" # Foreground - NEUTRAL (GRAY)
-    
+
         BOLD="$(tput bold)"
         RESET="$(tput sgr0)"
     fi
@@ -153,6 +153,7 @@ function display_help {
     describe_command "fresh" "hop artisan migrate:fresh"
     describe_command "make:*" "hop artisan make:*"
     describe_command "migrate" "hop artisan migrate"
+    describe_command "migrate:*" "hop artisan migrate:*"
     describe_command "queue:*" "hop artisan queue:*"
     describe_command "seed" "hop artisan db:seed"
     describe_command "test" "hop artisan test"
@@ -305,7 +306,7 @@ if [ "$1" == "explain" ]; then
 fi
 
 case $1 in
-    "app:"*|"build:"*|"db:"*|"make:"*|"queue:"*)
+    "app:"*|"build:"*|"db:"*|"make:"*|"migrate:"*|"queue:"*)
         run_exec_command php artisan "$@"
         ;;
     "art"|"artisan")
