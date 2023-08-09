@@ -2,7 +2,7 @@
 # Everything ahead of the last two digits are standard for the given service
 #
 # Network name is st-{service name}-{service MAJOR.MINOR}
-version: '2'
+version: '3.8'
 services:
   nginxproxy:
 # Enable nginx debug and increase output verbosity
