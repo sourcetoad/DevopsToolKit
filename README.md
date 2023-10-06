@@ -39,8 +39,6 @@ cd ./devop-tools/docker/data-source-services && docker-compose up --build -d
 ## phpMyAdmin
 If the optional tools are launched, you can find phpMyAdmin at: localhost:8080
 * It supports the following databases...
-  * mariadb104 (deprecated)
-  * mariadb105 (deprecated)
   * mariadb106 (lts)
   * mariadb1011 (lts)
 

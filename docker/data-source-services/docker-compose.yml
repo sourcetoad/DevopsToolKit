@@ -38,28 +38,6 @@ services:
       - MYSQL_PASSWORD=mariadb_pass
     networks:
       - st-internal
-  mariadb105:
-    image: mariadb:10.5
-    container_name: sourcetoad_mariadb105
-    ports:
-      - "33105:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=mariadb_user
-      - MYSQL_PASSWORD=mariadb_pass
-    networks:
-      - st-internal
-  mariadb104:
-    image: mariadb:10.4
-    container_name: sourcetoad_mariadb104
-    ports:
-      - "33104:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=mariadb_user
-      - MYSQL_PASSWORD=mariadb_pass
-    networks:
-      - st-internal
 networks:
     st-internal:
         external: true
