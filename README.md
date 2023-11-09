@@ -42,13 +42,6 @@ If the optional tools are launched, you can find phpMyAdmin at: localhost:8080
   * mariadb106 (lts)
   * mariadb1011 (lts)
 
-## Examples
-Inside the `examples` folder you will find example Docker configurations for
-popular frameworks like Laravel and Yii2.
-
-The examples make the assumption that any domain used for local development is
-already added to the `/etc/hosts` file. You can edit to add `127.0.0.1 domain.docker`.
-
 ## Scripts
 Inside the `scripts` folder you will find one-off scripts to help with tasks.
 
