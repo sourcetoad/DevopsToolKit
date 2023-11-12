@@ -1,0 +1,66 @@
+#!/bin/bash
+# Prompt for a branch name with a default
+prompt_for_branch() {
+  read -p "Enter the name of the $1 branch (default: $2): " branch
+  echo "${branch:-$2}" # Return the entered branch name or the default if none was entered
+}
+
+# Check for --update flag
+UPDATE_BRANCHES=false
+for arg in "$@"; do
+  if [ "$arg" == "--update" ]; then
+    UPDATE_BRANCHES=true
+    break
+  fi
+done
+
+# Prompt for the first branch name if not provided
+if [ -z "$1" ] || [ "$1" == "--update" ]; then
+  BRANCH1=$(prompt_for_branch "first" "master")
+else
+  BRANCH1="$1"
+fi
+
+# Prompt for the second branch name if not provided
+if [ -z "$2" ] || [ "$2" == "--update" ]; then
+  BRANCH2=$(prompt_for_branch "second" "staging")
+else
+  BRANCH2="$2"
+fi
+# Function to update or create temporary branches
+process_branch() {
+  local branch_name=$1
+  local temp_branch="temp_${branch_name}_$$"
+  if $UPDATE_BRANCHES; then
+    git checkout $branch_name &> /dev/null
+    git pull origin $branch_name &> /dev/null
+    echo "$branch_name"
+  else
+    git fetch origin $branch_name:$temp_branch &> /dev/null
+    echo $temp_branch
+  fi
+}
+
+# Process the first branch
+BRANCH1=$(process_branch $BRANCH1)
+
+# Process the second branch
+BRANCH2=$(process_branch $BRANCH2)
+
+# If not updating branches, use the temporary branches for log
+if ! $UPDATE_BRANCHES; then
+  # Run the git log command and process the output on temporary branches
+  git log $BRANCH2..$BRANCH1 --oneline --no-merges | grep -Eio "(\w+)-([0-9]+)" | tr '[:lower:]' '[:upper:]' | sort -u
+
+  # Delete the temporary branches
+  git branch -D $BRANCH1 &> /dev/null
+  git branch -D $BRANCH2 &> /dev/null
+  git status;
+else
+  # Run the git log command and process the output on updated branches
+  git log $BRANCH2..$BRANCH1 --oneline --no-merges | grep -Eio "(\w+)-([0-9]+)" | tr '[:lower:]' '[:upper:]' | sort -u
+
+  # Checkout to the first branch (assumed to be 'master')
+  git checkout $BRANCH1 &> /dev/null
+  git status
+fi
