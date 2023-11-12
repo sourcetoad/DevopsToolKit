@@ -62,7 +62,7 @@ scripts/link-git-commands.sh
 
 ### `git-tickets`
 
-This command is used to get the tickets since staging was was last updated. 
+This command is used to get the tickets since staging was last updated. 
 By default, it does not update the branches
 
 ```shell
