@@ -57,17 +57,17 @@ Either copy the scripts into your `PATH` or run the following command to add the
 scripts/link-git-commands.sh
 ```
 
-* This will link git scripts to a `bin` folder in your home directory. 
+* This will link git scripts to a `bin` folder in your home directory.
   If you do not have a `bin` folder, it will create one for you.
 
 ### `git-tickets`
 
-This command is used to get the tickets since staging was last updated. 
-By default, it does not update the branches
+This command is used to get the tickets since staging was last updated.
+By default, it does not update the branches.
 
 ```shell
 git tickets [options] [arguments]
-``` 
+```
 
 | Options  | Description                                                     | Default | Any of |
 |----------|-----------------------------------------------------------------|---------|--------|
@@ -85,7 +85,7 @@ git tickets [options] [arguments]
 ```
 
 ### `git-make-release`
-This command automates the process of preparing a new software release. 
+This command automates the process of preparing a new software release.
 It creates a release branch from the current branch, increments the version number, updates the `CHANGELOG.md`
 
 ```shell
