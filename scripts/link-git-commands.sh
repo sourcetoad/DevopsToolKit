@@ -24,7 +24,9 @@ fi
 # Function to create symlinks or simulate creating them
 create_symlink() {
     local script=$1
-    local symlink_path="$BIN_DIR/$(basename "$script")"
+    local symlink_path
+    symlink_path="$BIN_DIR/$(basename "$script")"
+
     if [ -x "$script" ]; then  # Check if the script file is executable
         if $DRY_RUN; then
             echo "Dry run: Would create symlink for $(basename "$script")"
