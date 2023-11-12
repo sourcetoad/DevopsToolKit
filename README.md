@@ -47,6 +47,55 @@ Inside the `scripts` folder you will find one-off scripts to help with tasks.
 
 * `db_migrate.sh` - Helps migrate databases between versions of mysql.
 
+## Git Scripts
+Custom scripts that extend Git functionality, to streamline the process of tracking tickets and managing releases
+
+### Installation
+Either copy the scripts into your `PATH` or run the following command to add the scripts to your `PATH`
+```shell
+scripts/link-git-commands.sh
+```
+* This will link git scripts to a `bin` folder in your home directory. If you do not have a `bin` folder, it will create one for you.
+
+`git-tickets`
+---------
+This command is used to get the tickets since staging was was last updated. By default it does not update the branches
+
+```shell
+git tickets [options] [arguments]
+``` 
+
+| Options  | Description                                                     | Default | Any of |
+|----------|-----------------------------------------------------------------|---------|--------|
+| --update | Update the specified branches from the remote before comparison |         |        |
+
+| Arguments | Description                          | Default | Any of     |
+|-----------|--------------------------------------|---------|------------|
+| branch 1  | the target branch that is up to date | master  | any branch |
+| branch 2  | the branch that is behind            | staging | any branch |
+
+### Example
+```shell
+  git tickets --update master staging
+```
+
+`git-make-release`
+---------
+This command automates the process of preparing a new software release. It creates a release branch from the current branch, increments the version number, updates the `CHANGELOG.md`
+
+```shell
+    git make-release [options]
+```
+
+| Options  | Description                                               | Default |
+|----------|-----------------------------------------------------------|---------|
+| --dry    | Perform a dry run without any changes to branches or tags | N/A     |
+
+### Example
+```shell
+git make-release --dry
+```
+
 ## Docs
 * [Setting up Nginx-Proxy](docs/nginx-proxy/README.md)
 * [Setting up PHP Testing in PhpStorm](docs/phpstorm-docker/README.md)
