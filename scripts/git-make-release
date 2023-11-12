@@ -2,19 +2,19 @@
 
 # Prompt for the version number
 prompt_for_version() {
-  read -p "Enter the version number (default: $1): " version
+  read -rp "Enter the version number (default: $1): " version
   echo "${version:-$1}" # Return the entered version number or the default if none was entered
 }
 
 # Increment version number
 increment_version() {
   local IFS='.'
-  read -a version_parts <<< "$1"
+  read -ar version_parts <<< "$1"
   # Increment the minor version and reset patch version
   local next_version="${version_parts[0]}.$((version_parts[1] + 1)).0"
 
   # Prompt for the version number, using the next version as the default
-  read -p "Enter the version number (default: $next_version): " version
+  read -rp "Enter the version number (default: $next_version): " version
   echo "${version:-$next_version}" # Return the entered version number or the default if none was entered
 }
 
@@ -27,7 +27,9 @@ get_latest_version() {
 prepend_to_changelog() {
   local version=$1
   local tickets=$2
-  local date=$(date +"%b %d, %Y")
+  local date
+
+  date=$(date +"%b %d, %Y")
   local changelog="CHANGELOG.md"
 
   # Create a backup of the CHANGELOG.md
@@ -54,7 +56,7 @@ fi
 
 # Get the latest tag and suggest the next version number
 LATEST_TAG=$(get_latest_version)
-NEXT_VERSION=$(increment_version ${LATEST_TAG#v}) # Assuming the tag is in the 'v1.2.3' format
+NEXT_VERSION=$(increment_version "${LATEST_TAG#v}") # Assuming the tag is in the 'v1.2.3' format
 
 if $DRY_RUN; then
   # Perform a dry run
