@@ -52,13 +52,15 @@ Custom scripts that extend Git functionality, to streamline the process of track
 
 ### Installation
 Either copy the scripts into your `PATH` or run the following command to add the scripts to your `PATH`
+
 ```shell
 scripts/link-git-commands.sh
 ```
+
 * This will link git scripts to a `bin` folder in your home directory. If you do not have a `bin` folder, it will create one for you.
 
-`git-tickets`
----------
+### `git-tickets`
+
 This command is used to get the tickets since staging was was last updated. By default it does not update the branches
 
 ```shell
@@ -74,13 +76,13 @@ git tickets [options] [arguments]
 | branch 1  | the target branch that is up to date | master  | any branch |
 | branch 2  | the branch that is behind            | staging | any branch |
 
-### Example
+### Tickets Example
+
 ```shell
   git tickets --update master staging
 ```
 
-`git-make-release`
----------
+### `git-make-release`
 This command automates the process of preparing a new software release. It creates a release branch from the current branch, increments the version number, updates the `CHANGELOG.md`
 
 ```shell
@@ -91,7 +93,8 @@ This command automates the process of preparing a new software release. It creat
 |----------|-----------------------------------------------------------|---------|
 | --dry    | Perform a dry run without any changes to branches or tags | N/A     |
 
-### Example
+### Make Release Example
+
 ```shell
 git make-release --dry
 ```
