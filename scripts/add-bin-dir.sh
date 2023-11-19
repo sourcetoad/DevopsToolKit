@@ -23,11 +23,14 @@ update_path() {
 }
 
 # Check for zsh or bash and their respective files
+
 if [ -n "$ZSH_VERSION" ]; then
+    echo "updating zsh profile"
     if [ -f "$HOME/.zshrc" ]; then
         update_path "$HOME/.zshrc"
     fi
 elif [ -n "$BASH_VERSION" ]; then
+    echo "updating bash profile"
     if [ -f "$HOME/.bash_profile" ]; then
         update_path "$HOME/.bash_profile"
     elif [ -f "$HOME/.bashrc" ]; then
@@ -41,13 +44,17 @@ fi
 
 # Apply the changes by sourcing the profile files
 if [ -n "$ZSH_VERSION" ] && [ -f "$HOME/.zshrc" ]; then
+    # shellcheck disable=SC1091
     source "$HOME/.zshrc"
 elif [ -n "$BASH_VERSION" ]; then
     if [ -f "$HOME/.bash_profile" ]; then
+        # shellcheck disable=SC1091
         source "$HOME/.bash_profile"
     elif [ -f "$HOME/.bashrc" ]; then
+        # shellcheck disable=SC1091
         source "$HOME/.bashrc"
     elif [ -f "$HOME/.profile" ]; then
+        # shellcheck disable=SC1091
         source "$HOME/.profile"
     fi
 fi
