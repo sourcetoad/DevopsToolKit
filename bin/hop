@@ -319,10 +319,7 @@ if [ -f "yarn.lock" ]; then
     PACKAGE_MANAGER="yarn"
 fi
 
-PACKAGE_MANAGER_RUN_CMD=("$PACKAGE_MANAGER")
-if [ "$PACKAGE_MANAGER" == "npm" ]; then
-    PACKAGE_MANAGER_RUN_CMD+=("run")
-fi
+PACKAGE_MANAGER_RUN_CMD=("$PACKAGE_MANAGER" "run")
 
 case $1 in
     "app:"*|"build:"*|"db:"*|"make:"*|"migrate:"*|"queue:"*)
