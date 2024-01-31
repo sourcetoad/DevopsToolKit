@@ -111,7 +111,7 @@ function display_help {
     echo
     tag "$BG_Y$BOLD" "Docker Commands"
     describe_command "up" "Start the containers"
-    describe_command "up" "-d" "Start the contains in the background"
+    describe_command "up" "-d" "\$@" "Start the contains in the background"
     describe_command "stop" "Stop the containers"
     describe_command "down" "Stop and remove the containers"
     describe_command "restart" "Restart the containers"
@@ -402,7 +402,7 @@ case $1 in
         ;;
     "up")
         shift 1
-        run_dss_command up -d
+        run_dss_command up -d "$@"
         run_command up "$@"
         ;;
     "yarn")
