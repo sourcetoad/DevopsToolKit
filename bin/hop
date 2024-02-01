@@ -354,7 +354,9 @@ case $1 in
         ;;
     "go")
         shift 1
-        run_hop_command up -d
+        if [ "$EXEC" == "no" ]; then
+            run_hop_command up -d
+        fi
         if [ -z "$*" ]; then
             run_hop_command "${PACKAGE_MANAGER_RUN_CMD[@]}" "dev"
         else
