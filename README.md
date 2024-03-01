@@ -56,10 +56,6 @@ Inside the `scripts` folder you will find one-off scripts to help with tasks.
 
 Add the `bin` directory to your path to use **Hop** and **Git Scripts**.
 
-```shell
-ln -s /path/to/DevopsToolKit/bin /usr/local/bin/sidt
-```
-
 ## Hop
 
 MISSING DESCRIPTION
