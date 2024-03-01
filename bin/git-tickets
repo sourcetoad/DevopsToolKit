@@ -33,13 +33,22 @@ process_branch() {
   local temp_branch="temp_${branch_name}_$$"
   if $UPDATE_BRANCHES; then
     git checkout "$branch_name" &> /dev/null
+    if [ $? -ne 0 ]; then
+      echo "Failed to checkout branch $branch_name" >&2
+      exit 1
+    fi
     git pull origin "$branch_name" &> /dev/null
     echo "$branch_name"
   else
     git fetch origin "$branch_name":"$temp_branch" &> /dev/null
+    if ! git rev-parse --verify "$temp_branch" &> /dev/null; then
+      echo "Failed to fetch and create temp branch for $branch_name" >&2
+      exit 1
+    fi
     echo "$temp_branch"
   fi
 }
+
 
 # Process the first branch
 BRANCH1=$(process_branch "$BRANCH1")
