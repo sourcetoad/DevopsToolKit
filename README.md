@@ -50,16 +50,6 @@ Inside the `scripts` folder you will find one-off scripts to help with tasks.
 ## Git Scripts
 Custom scripts that extend Git functionality, to streamline the process of tracking tickets and managing releases
 
-### Installation
-Either copy the scripts into your `PATH` or run the following command to add the scripts to your `PATH`
-
-```shell
-scripts/link-git-commands.sh
-```
-
-* This will link git scripts to a `bin` folder in your home directory.
-  If you do not have a `bin` folder, it will create one for you.
-
 ### `git-tickets`
 
 This command is used to get the tickets since staging was last updated.
