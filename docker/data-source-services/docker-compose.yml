@@ -20,7 +20,7 @@ services:
     image: mariadb:10.11
     container_name: sourcetoad_mariadb1011
     ports:
-      - "33111:3311"
+      - "33111:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_USER=mariadb_user

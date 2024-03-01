@@ -111,7 +111,7 @@ function display_help {
     echo
     tag "$BG_Y$BOLD" "Docker Commands"
     describe_command "up" "Start the containers"
-    describe_command "up" "-d" "Start the contains in the background"
+    describe_command "up" "-d" "\$@" "Start the contains in the background"
     describe_command "stop" "Stop the containers"
     describe_command "down" "Stop and remove the containers"
     describe_command "restart" "Restart the containers"
@@ -134,6 +134,7 @@ function display_help {
     echo
     tag "$BG_Y$BOLD" "Utilities"
     describe_command "explain" "Output the command that would be executed by hop"
+    describe_command "go" "\$@" "Start the container and run \"yarn/npm run\" {command} (default dev)"
     describe_command "in" "Start a shell session within the project's code container"
     echo
     tag "$BG_Y$BOLD" "Aliases"
@@ -246,6 +247,14 @@ fi
 # Running Commands
 #
 
+function run_hop_command {
+    if [ "$EXPLAIN" == "yes" ]; then
+        explain hop "$@"
+    else
+        hop "$@"
+    fi
+}
+
 function run_command {
     if [ "$EXPLAIN" == "yes" ]; then
         explain "${DOCKER_COMPOSE[@]}" "$@"
@@ -305,6 +314,13 @@ if [ "$1" == "explain" ]; then
     shift 1
 fi
 
+PACKAGE_MANAGER="npm"
+if [ -f "yarn.lock" ]; then
+    PACKAGE_MANAGER="yarn"
+fi
+
+PACKAGE_MANAGER_RUN_CMD=("$PACKAGE_MANAGER" "run")
+
 case $1 in
     "app:"*|"build:"*|"db:"*|"make:"*|"migrate:"*|"queue:"*)
         run_exec_command php artisan "$@"
@@ -335,6 +351,17 @@ case $1 in
     "fresh")
         shift 1
         run_exec_command php artisan migrate:fresh "$@"
+        ;;
+    "go")
+        shift 1
+        if [ "$EXEC" == "no" ]; then
+            run_hop_command up -d
+        fi
+        if [ -z "$*" ]; then
+            run_hop_command "${PACKAGE_MANAGER_RUN_CMD[@]}" "dev"
+        else
+            run_hop_command "${PACKAGE_MANAGER_RUN_CMD[@]}" "$@"
+        fi
         ;;
     "migrate")
         shift 1
@@ -402,7 +429,7 @@ case $1 in
         ;;
     "up")
         shift 1
-        run_dss_command up -d
+        run_dss_command up -d "$@"
         run_command up "$@"
         ;;
     "yarn")
