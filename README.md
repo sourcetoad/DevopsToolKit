@@ -73,9 +73,9 @@ By default, it does not update the branches.
 git tickets [options] [arguments]
 ```
 
-| Options  | Description                                                     | Default | Any of |
-|----------|-----------------------------------------------------------------|---------|--------|
-| --update | Update the specified branches from the remote before comparison |         |        |
+| Options  | Description                                                     | Default |
+|----------|-----------------------------------------------------------------|---------|
+| --update | Update the specified branches from the remote before comparison | N/A     |
 
 | Arguments | Description                          | Default | Any of     |
 |-----------|--------------------------------------|---------|------------|
