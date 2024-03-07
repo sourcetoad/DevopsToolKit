@@ -27,27 +27,88 @@ cd ./devop-tools/docker/data-source-services && docker-compose up --build -d
 ```
 
 #### Specific Setup - Windows
+
 * Kill, and optionally disable, the `World Wide Web Publishing Service`
 * Run `set COMPOSE_CONVERT_WINDOWS_PATHS=1` in your CMD or PowerShell terminal
 * Optionally, [read](https://github.com/docker/compose/issues/4303#issuecomment-379563170) this bug report.
 
 ### Optional: Data Source Tools
+
 * Optionally included is the following tools:
-  * phpMyAdmin
+* phpMyAdmin
 * `cd ./devop-tools/docker/data-source-tools && docker-compose up --build -d`
 
 ## phpMyAdmin
+
 If the optional tools are launched, you can find phpMyAdmin at: localhost:8080
+
 * It supports the following databases...
-  * mariadb106 (lts)
-  * mariadb1011 (lts)
+* mariadb106 (lts)
+* mariadb1011 (lts)
 
 ## Scripts
+
 Inside the `scripts` folder you will find one-off scripts to help with tasks.
 
 * `db_migrate.sh` - Helps migrate databases between versions of mysql.
 
+## CLI Tooling Setup
+
+Add the `bin` directory to your path to use **Hop** and **Git Scripts**.
+
+## Hop
+
+MISSING DESCRIPTION
+
+## Git Scripts
+
+Custom scripts that extend Git functionality, to streamline the process of tracking tickets and managing releases
+
+### `git-tickets`
+
+This command is used to get the tickets since staging was last updated.
+By default, it does not update the branches.
+
+```shell
+git tickets [options] [arguments]
+```
+
+| Options  | Description                                                     | Default |
+|----------|-----------------------------------------------------------------|---------|
+| --update | Update the specified branches from the remote before comparison | N/A     |
+
+| Arguments | Description                          | Default | Any of     |
+|-----------|--------------------------------------|---------|------------|
+| branch 1  | the target branch that is up to date | master  | any branch |
+| branch 2  | the branch that is behind            | staging | any branch |
+
+### Tickets Example
+
+```shell
+  git tickets --update master staging
+```
+
+### `git-make-release`
+
+This command automates the process of preparing a new software release.
+It creates a release branch from the current branch, increments the version number, updates the `CHANGELOG.md`
+
+```shell
+    git make-release [options]
+```
+
+| Options | Description                                               | Default |
+|---------|-----------------------------------------------------------|---------|
+| --dry   | Perform a dry run without any changes to branches or tags | N/A     |
+
+### Make Release Example
+
+```shell
+git make-release --dry
+```
+
 ## Docs
+
 * [Setting up Nginx-Proxy](docs/nginx-proxy/README.md)
 * [Setting up PHP Testing in PhpStorm](docs/phpstorm-docker/README.md)
 * [Leveraging Yii2 Shell](docs/yii2/yii-shell.md)
