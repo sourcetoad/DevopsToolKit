@@ -30,6 +30,8 @@ cd ./devop-tools/docker/data-source-services && docker-compose up --build -d
 * Kill, and optionally disable, the `World Wide Web Publishing Service`
 * Run `set COMPOSE_CONVERT_WINDOWS_PATHS=1` in your CMD or PowerShell terminal
 * Optionally, [read](https://github.com/docker/compose/issues/4303#issuecomment-379563170) this bug report.
+#### MinIO Setup - Local S3 Buckets
+ * [Setting up MinIO for local development](docs/minio/README.md)
 
 ### Optional: Data Source Tools
 * Optionally included is the following tools:
