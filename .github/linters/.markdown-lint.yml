@@ -1,3 +1,4 @@
+---
 # Hard wrap to 120, not 80
 MD013:
   line_length: 120
@@ -10,3 +11,6 @@ MD025: false
 
 # Allow no new lines between lists (Changelog)
 MD032: false
+
+# Allow base-urls (http) for links (Readme)
+MD034: false

@@ -2,6 +2,7 @@
 # Everything ahead of the last two digits are standard for the given service
 #
 # Network name is st-{service name}-{service MAJOR.MINOR}
+---
 version: '3.8'
 services:
   nginxproxy:
@@ -40,5 +41,5 @@ services:
       - st-internal
 networks:
     st-internal:
-        external: true
-        name: st-internal
+      external: true
+      name: st-internal
