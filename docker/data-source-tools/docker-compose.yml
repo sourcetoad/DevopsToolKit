@@ -25,6 +25,6 @@ services:
       PMA_USER: root
       PMA_PASSWORD: root
 networks:
-    st-internal:
-      external: true
-      name: st-internal
+  st-internal:
+    external: true
+    name: st-internal

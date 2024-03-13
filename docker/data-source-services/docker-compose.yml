@@ -16,7 +16,7 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./proxy_increase.conf:/etc/nginx/proxy.conf
     networks:
-     - st-internal
+      - st-internal
   mariadb1011:
     image: mariadb:10.11
     container_name: sourcetoad_mariadb1011
@@ -40,6 +40,6 @@ services:
     networks:
       - st-internal
 networks:
-    st-internal:
-      external: true
-      name: st-internal
+  st-internal:
+    external: true
+    name: st-internal
