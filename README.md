@@ -16,9 +16,9 @@ language and other tools it may need, as the databases and other services are
 standardized in this project. Since most cloud providers provide managed versions
 of these services, you likely would not use a docker version of them in production.
 
-## Docker
+# Docker
 
-### Required: data source services
+## Data Source Services
 
 ```bash
 git clone git@github.com:sourcetoad/DevopsToolKit.git devop-tools
@@ -26,21 +26,43 @@ git clone git@github.com:sourcetoad/DevopsToolKit.git devop-tools
 cd ./devop-tools/docker/data-source-services && docker-compose up --build -d
 ```
 
-#### Specific Setup - Windows
+### Windows
 * Kill, and optionally disable, the `World Wide Web Publishing Service`
 * Run `set COMPOSE_CONVERT_WINDOWS_PATHS=1` in your CMD or PowerShell terminal
 * Optionally, [read](https://github.com/docker/compose/issues/4303#issuecomment-379563170) this bug report.
 
-### Optional: Data Source Tools
+---
+
+## Data Source Tools
 * Optionally included is the following tools:
   * phpMyAdmin
-* `cd ./devop-tools/docker/data-source-tools && docker-compose up --build -d`
+  * Mailpit
 
-## phpMyAdmin
-If the optional tools are launched, you can find phpMyAdmin at: localhost:8080
+```bash
+cd ./devop-tools/docker/data-source-tools && docker-compose up --build -d
+```
+
+### phpMyAdmin
+_For managing MySQL/MariaDB databases visually._
+
+* Viewable at: http://localhost:8080
 * It supports the following databases...
   * mariadb106 (lts)
   * mariadb1011 (lts)
+
+### Mailpit
+_For mimicking an email inbox (ala mailtrap) for local usage._
+
+* Viewable at: http://localhost:8025
+* Configurable in projects via `.env`
+  * `MAIL_MAILER=smtp`
+  * `MAIL_HOST=sourcetoad_mailpit`
+  * `MAIL_PORT=1025`
+  * `MAIL_USERNAME=null`
+  * `MAIL_PASSWORD=null`
+  * `MAIL_ENCRYPTION=null`
+
+---
 
 ## Scripts
 Inside the `scripts` folder you will find one-off scripts to help with tasks.
@@ -48,6 +70,7 @@ Inside the `scripts` folder you will find one-off scripts to help with tasks.
 * `db_migrate.sh` - Helps migrate databases between versions of mysql.
 
 ## Docs
+* [Hop](docs/hop/README.md)
 * [Setting up Nginx-Proxy](docs/nginx-proxy/README.md)
 * [Setting up PHP Testing in PhpStorm](docs/phpstorm-docker/README.md)
 * [Leveraging Yii2 Shell](docs/yii2/yii-shell.md)
