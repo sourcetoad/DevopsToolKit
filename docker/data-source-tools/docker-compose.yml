@@ -13,6 +13,21 @@ services:
       MP_MAX_MESSAGES: 5000
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
+  minio:
+    hostname: s3.docker
+    image: minio/minio:latest
+    container_name: sourcetoad_minio
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    volumes:
+      - ./storage/data:/data
+    environment:
+      - MINIO_ROOT_USER=root
+      - MINIO_ROOT_PASSWORD=password
+    command: server /data/ --console-address :9090
+    networks:
+      - st-internal
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     container_name: sourcetoad_phpmyadmin

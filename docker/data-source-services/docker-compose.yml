@@ -39,22 +39,6 @@ services:
       - MYSQL_PASSWORD=mariadb_pass
     networks:
       - st-internal
-  minio:
-    hostname: s3.docker
-    image: minio/minio:latest
-    container_name: sourcetoad_minio
-    ports:
-      - "9000:9000"
-      - "9090:9090"
-    volumes:
-      - ./storage/data:/data
-    environment:
-      - MINIO_ROOT_USER=root
-      - MINIO_ROOT_PASSWORD=password
-    command: server /data/ --console-address :9090
-    restart: unless-stopped
-    networks:
-      - st-internal
 networks:
   st-internal:
     external: true
