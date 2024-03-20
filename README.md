@@ -30,8 +30,6 @@ cd ./devop-tools/docker/data-source-services && docker-compose up --build -d
 * Kill, and optionally disable, the `World Wide Web Publishing Service`
 * Run `set COMPOSE_CONVERT_WINDOWS_PATHS=1` in your CMD or PowerShell terminal
 * Optionally, [read](https://github.com/docker/compose/issues/4303#issuecomment-379563170) this bug report.
-#### MinIO Setup - Local S3 Buckets
- * [Setting up MinIO for local development](docs/minio/README.md)
 
 ---
 
@@ -39,6 +37,7 @@ cd ./devop-tools/docker/data-source-services && docker-compose up --build -d
 * Optionally included is the following tools:
   * phpMyAdmin
   * Mailpit
+  * MinIO
 
 ```bash
 cd ./devop-tools/docker/data-source-tools && docker-compose up --build -d
@@ -63,6 +62,23 @@ _For mimicking an email inbox (ala mailtrap) for local usage._
   * `MAIL_USERNAME=null`
   * `MAIL_PASSWORD=null`
   * `MAIL_ENCRYPTION=null`
+
+### MinIO
+_For running an S3 service locally._
+
+* Edit the `/etc/hosts` file on your system and make a reference for `127.0.0.1 s3.docker`
+* Open the admin console `http://s3.docker:9090` and login.
+  * username: root
+  * password: password
+* Create an appropriate bucket for each project as needed.
+* Modify the project's `.env` as follows:
+  * `FILESYSTEM_DRIVER=s3`
+  * `AWS_ACCESS_KEY_ID=root`
+  * `AWS_SECRET_ACCESS_KEY=password`
+  * `AWS_DEFAULT_REGION=us-east-1`
+  * `AWS_BUCKET=[project-bucket-name]`
+  * `AWS_ENDPOINT=http://s3.docker:9000`
+  * `AWS_USE_PATH_STYLE_ENDPOINT=true`
 
 ---
 
