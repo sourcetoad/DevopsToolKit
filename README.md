@@ -67,7 +67,7 @@ _For mimicking an email inbox (ala mailtrap) for local usage._
 _For running an S3 service locally._
 
 * Edit the `/etc/hosts` file on your system and make a reference for `127.0.0.1 s3.docker`
-* Open the admin console `http://s3.docker:9090` and login.
+* Open the admin console http://s3.docker:10001 and login.
   * username: root
   * password: password
 * Create an appropriate bucket for each project as needed.
@@ -77,7 +77,7 @@ _For running an S3 service locally._
   * `AWS_SECRET_ACCESS_KEY=password`
   * `AWS_DEFAULT_REGION=us-east-1`
   * `AWS_BUCKET=[project-bucket-name]`
-  * `AWS_ENDPOINT=http://s3.docker:9000`
+  * `AWS_ENDPOINT=http://s3.docker:10000`
   * `AWS_USE_PATH_STYLE_ENDPOINT=true`
 
 ---
