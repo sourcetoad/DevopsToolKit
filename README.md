@@ -94,7 +94,7 @@ Add the `bin` directory to your path to use **Hop** and **Git Scripts**.
 
 ## Hop
 
-MISSING DESCRIPTION
+A script that makes it easy to hop into your project containers and run commands.
 
 ## Git Scripts
 
