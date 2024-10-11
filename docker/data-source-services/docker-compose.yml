@@ -3,7 +3,6 @@
 #
 # Network name is st-{service name}-{service MAJOR.MINOR}
 ---
-version: '3.8'
 services:
   nginxproxy:
 # Enable nginx debug and increase output verbosity
