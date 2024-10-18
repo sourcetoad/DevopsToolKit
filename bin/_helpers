@@ -83,7 +83,7 @@ function tag {
 
 function output_tagged_string() {
     tag "$1" "$2" -n
-    echo $3
+    echo "$3"
 }
 
 function output_error {

@@ -69,22 +69,26 @@ while :; do
             exit
             ;;
         --local-domain|--local-port|--proxy-port|--proxy-domain)
-            parsed_value=$(parse_arg "$@")
+            if ! parsed_value=$(parse_arg "$@"); then
+                echo "$parsed_value"
+                exit 1
+            fi
             ;;
         --local-domain=?*|--local-port=?*|--proxy-port=?*|--proxy-domain=?*)
-            parsed_value=$(parse_arg ${1%%=*} ${1#*=})
+            if ! parsed_value=$(parse_arg "${1%%=*}" "${1#*=}"); then
+                echo "$parsed_value"
+                exit 1
+            fi
             ;;
         --local-domain=|--local-port=|--proxy-port=|--proxy-domain=)
-            parsed_value=$(parse_arg ${1%%=*})
+            if ! parsed_value=$(parse_arg "${1%%=*}"); then
+                echo "$parsed_value"
+                exit 1
+            fi
             ;;
         *)
             ;;
     esac
-
-    if [ $? -ne 0 ]; then
-        echo $parsed_value
-        exit 1
-    fi
 
     case $option in
         --local-domain)
@@ -104,7 +108,7 @@ while :; do
             ;;
     esac
 
-    if [ $1 == $option ]; then
+    if [ "$1" == "$option" ]; then
         shift
     fi
     shift
@@ -140,7 +144,7 @@ function pick_one_virtual_host_from_file() {
     local HOSTS
     local HOST
 
-    HOST_STRING=$(sed -nr 's/.*VIRTUAL_HOST=(.*)/\1/p' $FILE)
+    HOST_STRING=$(sed -nr 's/.*VIRTUAL_HOST=(.*)/\1/p' "$FILE")
 
     IFS="," read -ra HOSTS <<< "$HOST_STRING"
 
@@ -156,7 +160,7 @@ function pick_one_virtual_host_from_file() {
         exit 1
     fi
 
-    echo $HOST
+    echo "$HOST"
 }
 
 function determine_virtual_host() {
@@ -169,11 +173,11 @@ function determine_virtual_host() {
     HOST=$(pick_one_virtual_host_from_file $DOCKER_FILE)
 
     if [ $? -ne 0 ]; then
-        echo $HOST
+        echo "$HOST"
         exit 1
     fi
 
-    echo $HOST
+    echo "$HOST"
 }
 
 function determine_virtual_host_override() {
@@ -191,18 +195,18 @@ function determine_virtual_host_override() {
     HOST=$(pick_one_virtual_host_from_file $DOCKER_FILE_OVERRIDE $1)
 
     if [ $? -ne 0 ]; then
-        echo $HOST
+        echo "$HOST"
         exit 1
     fi
 
-    echo $HOST
+    echo "$HOST"
 }
 
 if [ -z "$LOCAL_DOMAIN" ]; then
     LOCAL_DOMAIN=$(determine_virtual_host)
 
     if [ $? -ne 0 ]; then
-        echo $LOCAL_DOMAIN
+        echo "$LOCAL_DOMAIN"
         exit 1
     fi
 fi
@@ -212,16 +216,16 @@ if [ -z "$LOCAL_PORT" ]; then
 fi
 
 if [ -z "$PROXY_DOMAIN" ]; then
-    PROXY_DOMAIN=$(determine_virtual_host_override $LOCAL_DOMAIN)
+    PROXY_DOMAIN=$(determine_virtual_host_override "$LOCAL_DOMAIN")
 
     if [ $? -ne 0 ]; then
-        echo $PROXY_DOMAIN
+        echo "$PROXY_DOMAIN"
         exit 1
     fi
 fi
 
 if [ -z "$PROXY_PORT" ]; then
-    PROXY_PORT=$(($RANDOM%(PORT_GEN_MIN-PORT_GEN_MAX+1)+PORT_GEN_MIN))
+    PROXY_PORT=$((RANDOM%(PORT_GEN_MIN-PORT_GEN_MAX+1)+PORT_GEN_MIN))
     output_info "No proxy port specified. Using random port: ${PROXY_PORT}"
 fi
 
