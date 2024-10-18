@@ -224,4 +224,4 @@ output_info "Starting proxy... $FG_C${LOCAL_DOMAIN}$FG_N:$FG_M${LOCAL_PORT}$RESE
 echo
 output_tagged_string "$BG_N" "Proxy URL" "https://$PROXY_DOMAIN"
 echo
-#ssh -tR ${PROXY_PORT}:${LOCAL_DOMAIN}:${LOCAL_PORT} proxy@local.sourcetoadtest.com sirtunnel.py ${PROXY_DOMAIN} ${PROXY_PORT}
+ssh -tR ${PROXY_PORT}:${LOCAL_DOMAIN}:${LOCAL_PORT} proxy@local.sourcetoadtest.com sirtunnel.py ${PROXY_DOMAIN} ${PROXY_PORT}
