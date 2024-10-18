@@ -170,9 +170,8 @@ function determine_virtual_host() {
     fi
 
     local HOST
-    HOST=$(pick_one_virtual_host_from_file $DOCKER_FILE)
 
-    if [ $? -ne 0 ]; then
+    if ! HOST=$(pick_one_virtual_host_from_file "$DOCKER_FILE"); then
         echo "$HOST"
         exit 1
     fi
@@ -181,7 +180,7 @@ function determine_virtual_host() {
 }
 
 function determine_virtual_host_override() {
-    if [ -z $1 ]; then
+    if [ -z "$1" ]; then
         output_error "No local host provided."
         exit 1
     fi
@@ -192,9 +191,8 @@ function determine_virtual_host_override() {
     fi
 
     local HOST
-    HOST=$(pick_one_virtual_host_from_file $DOCKER_FILE_OVERRIDE $1)
 
-    if [ $? -ne 0 ]; then
+    if ! HOST=$(pick_one_virtual_host_from_file "$DOCKER_FILE_OVERRIDE" "$1"); then
         echo "$HOST"
         exit 1
     fi
@@ -203,9 +201,7 @@ function determine_virtual_host_override() {
 }
 
 if [ -z "$LOCAL_DOMAIN" ]; then
-    LOCAL_DOMAIN=$(determine_virtual_host)
-
-    if [ $? -ne 0 ]; then
+    if ! LOCAL_DOMAIN=$(determine_virtual_host); then
         echo "$LOCAL_DOMAIN"
         exit 1
     fi
@@ -216,9 +212,7 @@ if [ -z "$LOCAL_PORT" ]; then
 fi
 
 if [ -z "$PROXY_DOMAIN" ]; then
-    PROXY_DOMAIN=$(determine_virtual_host_override "$LOCAL_DOMAIN")
-
-    if [ $? -ne 0 ]; then
+    if ! PROXY_DOMAIN=$(determine_virtual_host_override "$LOCAL_DOMAIN"); then
         echo "$PROXY_DOMAIN"
         exit 1
     fi
