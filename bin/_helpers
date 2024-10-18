@@ -27,24 +27,24 @@ if test -t 1; then
         COLOR_C=6   # color code - CYAN
         COLOR_N=246 # color code - NEUTRAL (GRAY)
 
-        BG_R="$(tput setab $COLOR_R)" # Background - RED
-        BG_G="$(tput setab $COLOR_G)" # Background - GREEN
-        BG_Y="$(tput setab $COLOR_Y)" # Background - YELLOW
-        BG_B="$(tput setab $COLOR_B)" # Background - BLUE
-        #BG_M="$(tput setab $COLOR_M)" # Background - MAGENTA
-        #BG_C="$(tput setab $COLOR_C)" # Background - CYAN
-        BG_N="$(tput setab $COLOR_N)" # Background - NEUTRAL (GRAY)
+        export BG_R="$(tput setab $COLOR_R)" # Background - RED
+        export BG_G="$(tput setab $COLOR_G)" # Background - GREEN
+        export BG_Y="$(tput setab $COLOR_Y)" # Background - YELLOW
+        export BG_B="$(tput setab $COLOR_B)" # Background - BLUE
+        export BG_M="$(tput setab $COLOR_M)" # Background - MAGENTA
+        export BG_C="$(tput setab $COLOR_C)" # Background - CYAN
+        export BG_N="$(tput setab $COLOR_N)" # Background - NEUTRAL (GRAY)
 
-        #FG_R="$(tput setaf $COLOR_R)" # Foreground - RED
-        #FG_G="$(tput setaf $COLOR_G)" # Foreground - GREEN
-        #FG_Y="$(tput setaf $COLOR_Y)" # Foreground - YELLOW
-        #FG_B="$(tput setaf $COLOR_B)" # Foreground - BLUE
-        FG_M="$(tput setaf $COLOR_M)" # Foreground - MAGENTA
-        FG_C="$(tput setaf $COLOR_C)" # Foreground - CYAN
-        FG_N="$(tput setaf $COLOR_N)" # Foreground - NEUTRAL (GRAY)
+        export FG_R="$(tput setaf $COLOR_R)" # Foreground - RED
+        export FG_G="$(tput setaf $COLOR_G)" # Foreground - GREEN
+        export FG_Y="$(tput setaf $COLOR_Y)" # Foreground - YELLOW
+        export FG_B="$(tput setaf $COLOR_B)" # Foreground - BLUE
+        export FG_M="$(tput setaf $COLOR_M)" # Foreground - MAGENTA
+        export FG_C="$(tput setaf $COLOR_C)" # Foreground - CYAN
+        export FG_N="$(tput setaf $COLOR_N)" # Foreground - NEUTRAL (GRAY)
 
-        BOLD="$(tput bold)"
-        RESET="$(tput sgr0)"
+        export BOLD="$(tput bold)"
+        export RESET="$(tput sgr0)"
     fi
 fi
 
