@@ -33,7 +33,7 @@ if test -t 1; then
         BG_B="$(tput setab $COLOR_B)" # Background - BLUE
         #BG_M="$(tput setab $COLOR_M)" # Background - MAGENTA
         #BG_C="$(tput setab $COLOR_C)" # Background - CYAN
-        #BG_N="$(tput setab $COLOR_N)" # Background - NEUTRAL (GRAY)
+        BG_N="$(tput setab $COLOR_N)" # Background - NEUTRAL (GRAY)
 
         #FG_R="$(tput setaf $COLOR_R)" # Foreground - RED
         #FG_G="$(tput setaf $COLOR_G)" # Foreground - GREEN
@@ -62,12 +62,15 @@ function tag {
     echo "$@" "${STYLE}  ${LABEL}  ${RESET} "
 }
 
+function output_tagged_string() {
+    tag "$1" "$2" -n
+    echo $3
+}
+
 function output_error {
-    tag "$BG_R" "ERROR" -n
-    echo "$1"
+    output_tagged_string "$BG_R" "ERROR" "$1"
 }
 
 function output_info {
-    tag "$BG_B" "INFO" -n
-    echo "$1"
+    output_tagged_string "$BG_B" "INFO" "$1"
 }
