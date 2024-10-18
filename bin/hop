@@ -1,61 +1,9 @@
 #!/usr/bin/env bash
 
-HOP_PATH=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+HOP_PATH=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 TOOLKIT_PATH=$(dirname "$HOP_PATH")
 
-#
-# Script Output
-#
-
-# Determine width of the program
-ACTUAL_WIDTH=$(($(tput cols) - 2))
-MAX_WIDTH=100
-
-if test "$ACTUAL_WIDTH" -gt "$MAX_WIDTH"; then
-    WIDTH=$MAX_WIDTH
-else
-    WIDTH=$ACTUAL_WIDTH
-fi
-
-# Setup Color Outputs
-if test -t 1; then
-    ncolors=$(tput colors)
-
-    if test -n "$ncolors" && test "$ncolors" -ge 8; then
-        COLOR_R=1   # color code - RED
-        COLOR_G=2   # color code - GREEN
-        COLOR_Y=3   # color code - YELLOW
-        COLOR_B=4   # color code - BLUE
-        COLOR_M=5   # color code - MAGENTA
-        COLOR_C=6   # color code - CYAN
-        COLOR_N=246 # color code - NEUTRAL (GRAY)
-
-        BG_R="$(tput setab $COLOR_R)" # Background - RED
-        BG_G="$(tput setab $COLOR_G)" # Background - GREEN
-        BG_Y="$(tput setab $COLOR_Y)" # Background - YELLOW
-        BG_B="$(tput setab $COLOR_B)" # Background - BLUE
-        #BG_M="$(tput setab $COLOR_M)" # Background - MAGENTA
-        #BG_C="$(tput setab $COLOR_C)" # Background - CYAN
-        #BG_N="$(tput setab $COLOR_N)" # Background - NEUTRAL (GRAY)
-
-        #FG_R="$(tput setaf $COLOR_R)" # Foreground - RED
-        #FG_G="$(tput setaf $COLOR_G)" # Foreground - GREEN
-        #FG_Y="$(tput setaf $COLOR_Y)" # Foreground - YELLOW
-        #FG_B="$(tput setaf $COLOR_B)" # Foreground - BLUE
-        FG_M="$(tput setaf $COLOR_M)" # Foreground - MAGENTA
-        FG_C="$(tput setaf $COLOR_C)" # Foreground - CYAN
-        FG_N="$(tput setaf $COLOR_N)" # Foreground - NEUTRAL (GRAY)
-
-        BOLD="$(tput bold)"
-        RESET="$(tput sgr0)"
-    fi
-fi
-
-function join {
-    local IFS="$1"
-    shift
-    echo "$*"
-}
+source "$TOOLKIT_PATH/bin/_helpers"
 
 function describe_command {
     local COMMAND_NAME=$1
@@ -77,19 +25,6 @@ function describe_command {
     SEGMENTS+=("${FG_N}${DESCRIPTION}")
 
     join " " "${SEGMENTS[@]}" "${RESET}"
-}
-
-function tag {
-    local STYLE=$1
-    local LABEL=$2
-    shift 2
-
-    echo "$@" "${STYLE}  ${LABEL}  ${RESET} "
-}
-
-function output_error {
-    tag "$BG_R" "ERROR" -n
-    echo "$1"
 }
 
 EXPLAIN_COUNT=0
@@ -159,6 +94,9 @@ function display_help {
     describe_command "seed" "hop artisan db:seed"
     describe_command "test" "hop artisan test"
     describe_command "tinker" "hop artisan tinker"
+    echo
+    tag "$BG_Y$BOLD" "Commands"
+    describe_command "proxy" "\$@" "Start a proxy for this project."
 }
 
 if [ $# -lt 1 ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "-help" ] || [ "$1" == "--help" ]; then
@@ -410,6 +348,10 @@ case $1 in
     "pint-fix")
         shift 1
         run_exec_command php vendor/bin/pint
+        ;;
+    "proxy")
+        shift 1
+        bash "$TOOLKIT_PATH/bin/proxy" "$@"
         ;;
     "ps"|"status")
         shift 1
