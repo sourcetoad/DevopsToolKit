@@ -14,6 +14,25 @@ else
     WIDTH=$ACTUAL_WIDTH
 fi
 
+declare BG_R
+declare BG_G
+declare BG_Y
+declare BG_B
+declare BG_M
+declare BG_C
+declare BG_N
+
+declare FG_R
+declare FG_G
+declare FG_Y
+declare FG_B
+declare FG_M
+declare FG_C
+declare FG_N
+
+declare BOLD
+declare RESET
+
 # Setup Color Outputs
 if test -t 1; then
     ncolors=$(tput colors)
@@ -27,24 +46,24 @@ if test -t 1; then
         COLOR_C=6   # color code - CYAN
         COLOR_N=246 # color code - NEUTRAL (GRAY)
 
-        export BG_R="$(tput setab $COLOR_R)" # Background - RED
-        export BG_G="$(tput setab $COLOR_G)" # Background - GREEN
-        export BG_Y="$(tput setab $COLOR_Y)" # Background - YELLOW
-        export BG_B="$(tput setab $COLOR_B)" # Background - BLUE
-        export BG_M="$(tput setab $COLOR_M)" # Background - MAGENTA
-        export BG_C="$(tput setab $COLOR_C)" # Background - CYAN
-        export BG_N="$(tput setab $COLOR_N)" # Background - NEUTRAL (GRAY)
+        BG_R="$(tput setab $COLOR_R)" # Background - RED
+        BG_G="$(tput setab $COLOR_G)" # Background - GREEN
+        BG_Y="$(tput setab $COLOR_Y)" # Background - YELLOW
+        BG_B="$(tput setab $COLOR_B)" # Background - BLUE
+        BG_M="$(tput setab $COLOR_M)" # Background - MAGENTA
+        BG_C="$(tput setab $COLOR_C)" # Background - CYAN
+        BG_N="$(tput setab $COLOR_N)" # Background - NEUTRAL (GRAY)
 
-        export FG_R="$(tput setaf $COLOR_R)" # Foreground - RED
-        export FG_G="$(tput setaf $COLOR_G)" # Foreground - GREEN
-        export FG_Y="$(tput setaf $COLOR_Y)" # Foreground - YELLOW
-        export FG_B="$(tput setaf $COLOR_B)" # Foreground - BLUE
-        export FG_M="$(tput setaf $COLOR_M)" # Foreground - MAGENTA
-        export FG_C="$(tput setaf $COLOR_C)" # Foreground - CYAN
-        export FG_N="$(tput setaf $COLOR_N)" # Foreground - NEUTRAL (GRAY)
+        FG_R="$(tput setaf $COLOR_R)" # Foreground - RED
+        FG_G="$(tput setaf $COLOR_G)" # Foreground - GREEN
+        FG_Y="$(tput setaf $COLOR_Y)" # Foreground - YELLOW
+        FG_B="$(tput setaf $COLOR_B)" # Foreground - BLUE
+        FG_M="$(tput setaf $COLOR_M)" # Foreground - MAGENTA
+        FG_C="$(tput setaf $COLOR_C)" # Foreground - CYAN
+        FG_N="$(tput setaf $COLOR_N)" # Foreground - NEUTRAL (GRAY)
 
-        export BOLD="$(tput bold)"
-        export RESET="$(tput sgr0)"
+        BOLD="$(tput bold)"
+        RESET="$(tput sgr0)"
     fi
 fi
 
@@ -74,3 +93,24 @@ function output_error {
 function output_info {
     output_tagged_string "$BG_B" "INFO" "$1"
 }
+
+export BG_R
+export BG_G
+export BG_Y
+export BG_B
+export BG_M
+export BG_C
+export BG_N
+
+export FG_R
+export FG_G
+export FG_Y
+export FG_B
+export FG_M
+export FG_C
+export FG_N
+
+export BOLD
+export RESET
+
+export WIDTH
