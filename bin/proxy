@@ -141,23 +141,42 @@ function pick_one_virtual_host_from_file() {
     local EXCEPT=$2
 
     local HOST_STRING
-    local HOSTS
+    local HOSTS=()
     local HOST
+    local HOST_OPTIONS=()
 
     HOST_STRING=$(sed -nr 's/.*VIRTUAL_HOST=(.*)/\1/p' "$FILE")
 
     IFS="," read -ra HOSTS <<< "$HOST_STRING"
 
     for HOST_ENTRY in "${HOSTS[@]}"; do
-      if [ "$HOST_ENTRY" != "$EXCEPT" ]; then
-          HOST=$HOST_ENTRY
-          break;
-      fi
+        if [ "$HOST_ENTRY" != "$EXCEPT" ]; then
+            HOST_OPTIONS+=("$HOST_ENTRY")
+        fi
     done
 
-    if [ -z "$HOST" ]; then
-        output_error "No VIRTUAL_HOST found in $FILE."
+    if [ "${#HOST_OPTIONS[@]}" -eq "0" ]; then
+        output_error "No VIRTUAL_HOST overrides found in $FILE."
         exit 1
+    elif [ "${#HOST_OPTIONS[@]}" -gt "1" ]; then
+        PS3="Select a Proxy URL (or quit to exit): "
+        while [ -z "$HOST" ]; do
+            select opt in "${HOST_OPTIONS[@]}"; do
+                if [ -z "$opt" ]; then
+                    if [ "$REPLY" == "quit" ]; then
+                        output_info "Exiting..."
+                        exit 1
+                    fi
+                    >&2 output_error "Invalid selection: $REPLY. Please enter the number of the option you wish to select."
+                    continue
+                fi
+
+                HOST=$opt
+                break
+            done
+        done
+    else
+        HOST=${HOST_OPTIONS[0]}
     fi
 
     echo "$HOST"
