@@ -48,8 +48,9 @@ _For managing MySQL/MariaDB databases visually._
 
 * Viewable at: http://localhost:8080
 * It supports the following databases...
-  * mariadb106 (lts)
+  * mariadb106 (lts, deprecated)
   * mariadb1011 (lts)
+  * mariadb1104 (lts)
 
 ### Mailpit
 _For mimicking an email inbox (ala mailtrap) for local usage._
