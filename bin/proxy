@@ -4,6 +4,7 @@
 set -a
 
 if [ -f ".env" ]; then
+    # shellcheck source=/dev/null
     source ".env"
 fi
 
