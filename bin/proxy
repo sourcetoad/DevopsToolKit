@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+# Enable auto-export
+set -a
+
+if [ -f ".env" ]; then
+    source ".env"
+fi
+
+# Disable auto-export
+set +a
+
 HOP_PATH=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 TOOLKIT_PATH=$(dirname "$HOP_PATH")
 
@@ -146,6 +156,16 @@ function pick_one_virtual_host_from_file() {
     local HOST_OPTIONS=()
 
     HOST_STRING=$(sed -nr 's/.*VIRTUAL_HOST=(.*)/\1/p' "$FILE")
+
+    # Trim double quotes from HOST_STRING
+    HOST_STRING=$(echo "$HOST_STRING" | tr -d '"')
+
+    # Pipe HOST_STRING through envsubst if available
+    if command -v envsubst &> /dev/null; then
+        HOST_STRING=$(echo "$HOST_STRING" | envsubst)
+    else
+        >&2 output_warning "envsubst not found. Skipping environment variable substitution."
+    fi
 
     IFS="," read -ra HOSTS <<< "$HOST_STRING"
 

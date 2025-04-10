@@ -94,6 +94,10 @@ function output_info {
     output_tagged_string "$BG_B" "INFO" "$1"
 }
 
+function output_warning {
+    output_tagged_string "$BG_Y" "INFO" "$1"
+}
+
 export BG_R
 export BG_G
 export BG_Y
