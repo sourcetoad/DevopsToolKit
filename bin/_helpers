@@ -95,7 +95,7 @@ function output_info {
 }
 
 function output_warning {
-    output_tagged_string "$BG_Y" "INFO" "$1"
+    output_tagged_string "$BG_Y" "WARNING" "$1"
 }
 
 export BG_R
