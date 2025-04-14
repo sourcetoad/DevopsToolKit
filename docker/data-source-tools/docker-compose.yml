@@ -35,7 +35,7 @@ services:
     networks:
       - st-internal
     environment:
-      PMA_HOSTS: mariadb1011,mariadb106
+      PMA_HOSTS: mariadb1104,mariadb1011
       PMA_USER: root
       PMA_PASSWORD: root
 networks:
