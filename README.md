@@ -83,11 +83,68 @@ _For running an S3 service locally._
 ---
 
 ## Scripts
+
 Inside the `scripts` folder you will find one-off scripts to help with tasks.
 
 * `db_migrate.sh` - Helps migrate databases between versions of mysql.
 
+## CLI Tooling Setup
+
+Add the `bin` directory to your path to use **Hop** and **Git Scripts**.
+
+## Hop
+
+A script that makes it easy to hop into your project containers and run commands.
+
+## Git Scripts
+
+Custom scripts that extend Git functionality, to streamline the process of tracking tickets and managing releases
+
+### `git-tickets`
+
+This command is used to get the tickets since staging was last updated.
+By default, it does not update the branches.
+
+```shell
+git tickets [options] [arguments]
+```
+
+| Options  | Description                                                     | Default |
+|----------|-----------------------------------------------------------------|---------|
+| --update | Update the specified branches from the remote before comparison | N/A     |
+
+| Arguments | Description                          | Default | Any of     |
+|-----------|--------------------------------------|---------|------------|
+| branch 1  | the target branch that is up to date | master  | any branch |
+| branch 2  | the branch that is behind            | staging | any branch |
+
+### Tickets Example
+
+```shell
+  git tickets --update master staging
+```
+
+### `git-make-release`
+
+This command automates the process of preparing a new software release.
+It creates a release branch from the current branch, increments the version number, updates the `CHANGELOG.md`
+
+```shell
+    git make-release [options]
+```
+
+| Options | Description                                               | Default |
+|---------|-----------------------------------------------------------|---------|
+| --dry   | Perform a dry run without any changes to branches or tags | N/A     |
+
+### Make Release Example
+
+```shell
+git make-release --dry
+```
+
 ## Docs
+
 * [Hop](docs/hop/README.md)
 * [Setting up Nginx-Proxy](docs/nginx-proxy/README.md)
 * [Setting up PHP Testing in PhpStorm](docs/phpstorm-docker/README.md)
