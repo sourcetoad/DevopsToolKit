@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+
+# Prompt for the version number
+prompt_for_version() {
+  read -rp "Enter the version number (default: $1): " version
+  echo "${version:-$1}" # Return the entered version number or the default if none was entered
+}
+
+# Increment version number
+increment_version() {
+  # Split the version string into parts using read -a
+  IFS='.'
+  read -ra version_parts <<< "$1"
+
+  # Ensure that we have exactly three parts for major, minor, and patch versions
+  if [ ${#version_parts[@]} -ne 3 ]; then
+    echo "Error: Invalid version format '$1'. Expected format 'Major.Minor.Patch'." >&2
+    return 1  # Exit the function with an error status
+  fi
+
+  # Increment the minor version and reset the patch version to 0
+  local next_version="${version_parts[0]}.$((version_parts[1] + 1)).0"
+
+  # Call prompt_for_version, using the next version as the default
+  prompt_for_version "$next_version"
+}
+
+# Get the latest version tag
+get_latest_version() {
+  git describe --tags "$(git rev-list --tags --max-count=1)" 2>/dev/null || echo "v0.0.0"
+}
+
+# Prepend the tickets to the CHANGELOG.md
+prepend_to_changelog() {
+  local version=$1
+  local tickets=$2
+  local date
+
+  date=$(date +"%b %d, %Y")
+  local changelog="CHANGELOG.md"
+
+  # Create a backup of the CHANGELOG.md
+  cp "$changelog" "$changelog.bak"
+
+  # Prepend the new content to the CHANGELOG.md
+  {
+    echo "# v$version ($date)"
+    for ticket in $tickets; do
+      echo "* $ticket - "
+    done
+    echo ""
+    cat "$changelog.bak"
+  } > "$changelog"
+
+  rm "$changelog.bak"
+}
+
+# Check if the --dry flag is set
+DRY_RUN=false
+if [ "$1" == "--dry" ]; then
+  DRY_RUN=true
+fi
+
+# Get the latest tag and suggest the next version number
+LATEST_TAG=$(get_latest_version)
+NEXT_VERSION=$(increment_version "${LATEST_TAG#v}") # Assuming the tag is in the 'v1.2.3' format
+
+if $DRY_RUN; then
+  # Perform a dry run
+  echo "This is a dry run. The release branch will not be created."
+  echo "The next version number would be: ${NEXT_VERSION}"
+  git tickets | grep -Eo '(\w+)-([0-9]+)'
+else
+  # Perform the actual release process
+  # Capture the output of git-tickets
+  TICKETS_OUTPUT=$(git tickets --update)
+
+  # Use grep to filter the output
+  TICKET_IDS=$(echo "$TICKETS_OUTPUT" | grep -Eo '(\w+)-([0-9]+)')
+
+  # Prepend the tickets to the CHANGELOG.md
+  prepend_to_changelog "$NEXT_VERSION" "$TICKET_IDS"
+
+  # Checkout a new branch with the pattern release-###
+  git checkout -b "release-${NEXT_VERSION}"
+
+  # Add the CHANGELOG.md to the staging area
+  git add CHANGELOG.md
+
+  echo "Tickets to be included in this release:"
+  echo "$TICKET_IDS"
+fi
