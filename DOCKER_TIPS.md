@@ -4,7 +4,7 @@
 
 ```bash
 # Start all environments services
-docker-compose up --build
+docker compose up --build
 
 # Restart a specific container
 docker restart [service name]
