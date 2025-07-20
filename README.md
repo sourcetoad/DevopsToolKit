@@ -23,7 +23,7 @@ of these services, you likely would not use a docker version of them in producti
 ```bash
 git clone git@github.com:sourcetoad/DevopsToolKit.git devop-tools
 ./devop-tools/docker/data-source-services/network-creation.sh
-cd ./devop-tools/docker/data-source-services && docker-compose up --build -d
+cd ./devop-tools/docker/data-source-services && docker compose up --build -d
 ```
 
 ### Windows
@@ -40,7 +40,7 @@ cd ./devop-tools/docker/data-source-services && docker-compose up --build -d
   * MinIO
 
 ```bash
-cd ./devop-tools/docker/data-source-tools && docker-compose up --build -d
+cd ./devop-tools/docker/data-source-tools && docker compose up --build -d
 ```
 
 ### phpMyAdmin
