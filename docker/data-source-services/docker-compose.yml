@@ -61,7 +61,7 @@ services:
           - s3.docker
     healthcheck:
       test: ["CMD", "sh", "-c", "curl -f http://127.0.0.1:9000/health && curl -f http://127.0.0.1:9001/health"]
-      interval: 30s
+      interval: 5m
       timeout: 10s
       retries: 3
       start_period: 40s
