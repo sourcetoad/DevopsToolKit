@@ -1,5 +1,2 @@
 .DS_Store
 .idea
-docker/data-source-tools/storage
-docker/data-source-tools/storage/*
-
