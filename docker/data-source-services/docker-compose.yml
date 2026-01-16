@@ -16,6 +16,17 @@ services:
       - ./proxy_increase.conf:/etc/nginx/proxy.conf
     networks:
       - st-internal
+  mariadb1108:
+    image: mariadb:11.8
+    container_name: sourcetoad_mariadb1108
+    ports:
+      - "33118:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=mariadb_user
+      - MYSQL_PASSWORD=mariadb_pass
+    networks:
+      - st-internal
   mariadb1104:
     image: mariadb:11.4
     container_name: sourcetoad_mariadb1104
