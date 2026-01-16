@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: docker-compose
+    directories:
+      - "/docker/data-source-services"
+      - "/docker/data-source-tools"
+    schedule:
+      interval: weekly
+      day: "monday"
+      time: "08:00"
+      timezone: "America/New_York"
