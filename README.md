@@ -65,6 +65,7 @@ _For managing MySQL/MariaDB databases visually._
 * It supports the following databases...
   * mariadb1011 (lts, deprecated)
   * mariadb1104 (lts)
+  * mariadb1108 (lts)
 
 ### Mailpit
 _For mimicking an email inbox (ala mailtrap) for local usage._
