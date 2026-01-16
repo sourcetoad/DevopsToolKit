@@ -7,7 +7,7 @@ services:
   nginxproxy:
 # Enable nginx debug and increase output verbosity
 #    command: [nginx-debug, '-g', 'daemon off;']
-    image: jwilder/nginx-proxy
+    image: jwilder/nginx-proxy:1.9
     container_name: sourcetoad_nginx_proxy
     ports:
       - "80:80"
