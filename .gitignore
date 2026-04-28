@@ -1,2 +1,4 @@
 .DS_Store
 .idea
+docker/data-source-services/docker-compose.override.yml
+docker/data-source-tools/docker-compose.override.yml
