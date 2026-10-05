@@ -62,7 +62,7 @@ services:
       - st-internal
   rustfs:
     container_name: sourcetoad_rustfs
-    image: rustfs/rustfs:1.0.0-alpha.79
+    image: rustfs/rustfs:1.0.1
     ports:
       - "9000:9000"
       - "9001:9001"
