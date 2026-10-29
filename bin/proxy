@@ -15,12 +15,12 @@ HOP_PATH=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 TOOLKIT_PATH=$(dirname "$HOP_PATH")
 
 LOCAL_DOMAIN=
+LOCAL_HOST=localhost
 LOCAL_PORT=
-PROXY_DOMAIN=
-PROXY_PORT=
+PROXY_TOKEN=${PINGGY_TOKEN:-}
 
-PORT_GEN_MAX=65535
-PORT_GEN_MIN=10002
+PINGGY_HOST=${PINGGY_HOST:-pro.pinggy.io}
+PINGGY_SSH_PORTS=${PINGGY_SSH_PORT:-443 80}
 
 source "$TOOLKIT_PATH/bin/_helpers"
 
@@ -53,9 +53,14 @@ function display_help() {
     tag "$BG_Y$BOLD" "Options"
     describe "-h, --help" "Display this help message."
     describe "--local-domain" "Overrides the automatically determined local domain."
+    describe "--local-host" "Host the tunnel forwards to. Defaults to localhost."
     describe "--local-port" "Overrides the default local port of 80."
-    describe "--proxy-port" "Specify the port to use for the proxy. Required."
-    describe "--proxy-domain" "The subdomain to use for the proxy."
+    describe "--token" "Pinggy access token. Defaults to \$PINGGY_TOKEN."
+    echo
+    tag "$BG_Y$BOLD" "Environment"
+    describe "PINGGY_TOKEN" "Pinggy access token (shell or project .env)."
+    describe "PINGGY_HOST" "Pinggy server. Defaults to pro.pinggy.io."
+    describe "PINGGY_SSH_PORT" "Pinggy SSH port. Defaults to 443, falling back to 80."
 }
 
 function parse_arg() {
@@ -79,19 +84,19 @@ while :; do
             display_help
             exit
             ;;
-        --local-domain|--local-port|--proxy-port|--proxy-domain)
+        --local-domain|--local-host|--local-port|--token)
             if ! parsed_value=$(parse_arg "$@"); then
                 echo "$parsed_value"
                 exit 1
             fi
             ;;
-        --local-domain=?*|--local-port=?*|--proxy-port=?*|--proxy-domain=?*)
+        --local-domain=?*|--local-host=?*|--local-port=?*|--token=?*)
             if ! parsed_value=$(parse_arg "${1%%=*}" "${1#*=}"); then
                 echo "$parsed_value"
                 exit 1
             fi
             ;;
-        --local-domain=|--local-port=|--proxy-port=|--proxy-domain=)
+        --local-domain=|--local-host=|--local-port=|--token=)
             if ! parsed_value=$(parse_arg "${1%%=*}"); then
                 echo "$parsed_value"
                 exit 1
@@ -105,14 +110,14 @@ while :; do
         --local-domain)
             LOCAL_DOMAIN=$parsed_value
             ;;
+        --local-host)
+            LOCAL_HOST=$parsed_value
+            ;;
         --local-port)
             LOCAL_PORT=$parsed_value
             ;;
-        --proxy-domain)
-            PROXY_DOMAIN=$parsed_value
-            ;;
-        --proxy-port)
-            PROXY_PORT=$parsed_value
+        --token)
+            PROXY_TOKEN=$parsed_value
             ;;
         *)
             break
@@ -135,17 +140,6 @@ function locate_docker_file {
     done
 }
 DOCKER_FILE=$(locate_docker_file)
-
-function locate_docker_file_override {
-    local POTENTIAL_FILES=("docker/docker-compose.override.yml" "docker-compose.override.yml")
-    for file in "${POTENTIAL_FILES[@]}"; do
-        if [ -f "$file" ]; then
-            echo "$file"
-            return
-        fi
-    done
-}
-DOCKER_FILE_OVERRIDE=$(locate_docker_file_override)
 
 function pick_one_virtual_host_from_file() {
     local FILE=$1
@@ -219,27 +213,6 @@ function determine_virtual_host() {
     echo "$HOST"
 }
 
-function determine_virtual_host_override() {
-    if [ -z "$1" ]; then
-        output_error "No local host provided."
-        exit 1
-    fi
-
-    if [ -z "$DOCKER_FILE_OVERRIDE" ]; then
-        output_error "No docker-compose override file found. It is recommended that you create a docker-compose.override.yml file with an override for your VIRTUAL_HOST environment variable."
-        exit 1
-    fi
-
-    local HOST
-
-    if ! HOST=$(pick_one_virtual_host_from_file "$DOCKER_FILE_OVERRIDE" "$1"); then
-        echo "$HOST"
-        exit 1
-    fi
-
-    echo "$HOST"
-}
-
 if [ -z "$LOCAL_DOMAIN" ]; then
     if ! LOCAL_DOMAIN=$(determine_virtual_host); then
         echo "$LOCAL_DOMAIN"
@@ -251,21 +224,41 @@ if [ -z "$LOCAL_PORT" ]; then
     LOCAL_PORT=80
 fi
 
-if [ -z "$PROXY_DOMAIN" ]; then
-    if ! PROXY_DOMAIN=$(determine_virtual_host_override "$LOCAL_DOMAIN"); then
-        echo "$PROXY_DOMAIN"
-        exit 1
+if [ -z "$PROXY_TOKEN" ]; then
+    output_error "No Pinggy token found. Set PINGGY_TOKEN (shell or project .env) or pass --token."
+    exit 1
+fi
+
+echo
+output_info "Starting proxy... $FG_C${LOCAL_DOMAIN}$FG_N via $FG_C${LOCAL_HOST}$FG_N:$FG_M${LOCAL_PORT}$RESET -> $FG_C${PINGGY_HOST}$RESET"
+output_info "Your public URL will be printed by Pinggy below."
+echo
+
+# Rewrite the Host header so nginx-proxy routes to this project without a VIRTUAL_HOST override.
+# Pinggy only prints its output with a TTY when a command (the Host rewrite) is passed.
+TTY_FLAG=-T
+if [ -t 0 ]; then
+    TTY_FLAG=-t
+fi
+
+for SSH_PORT in $PINGGY_SSH_PORTS; do
+    STARTED_AT=$SECONDS
+
+    ssh "$TTY_FLAG" -p "${SSH_PORT}" \
+        -R "0:${LOCAL_HOST}:${LOCAL_PORT}" \
+        -o StrictHostKeyChecking=no \
+        -o ConnectTimeout=10 \
+        -o ServerAliveInterval=30 \
+        "${PROXY_TOKEN}@${PINGGY_HOST}" \
+        "u:Host:${LOCAL_DOMAIN}"
+    EXIT_CODE=$?
+
+    # Only fall back when the connection failed quickly, not after a tunnel was running.
+    if [ "$EXIT_CODE" -ne 255 ] || [ $((SECONDS - STARTED_AT)) -gt 20 ]; then
+        exit "$EXIT_CODE"
     fi
-fi
 
-if [ -z "$PROXY_PORT" ]; then
-    PROXY_PORT=$((RANDOM%(PORT_GEN_MIN-PORT_GEN_MAX+1)+PORT_GEN_MIN))
-    output_info "No proxy port specified. Using random port: ${PROXY_PORT}"
-fi
+    output_warning "Could not connect to ${PINGGY_HOST} on port ${SSH_PORT}."
+done
 
-echo
-output_info "Starting proxy... $FG_C${LOCAL_DOMAIN}$FG_N:$FG_M${LOCAL_PORT}$RESET -> $FG_C${PROXY_DOMAIN}$FG_N:$FG_M${PROXY_PORT}$RESET"
-echo
-output_tagged_string "$BG_N" "Proxy URL" "https://$PROXY_DOMAIN"
-echo
-ssh -tR "${PROXY_PORT}:${LOCAL_DOMAIN}:${LOCAL_PORT}" sirtunnel@local.sourcetoadtest.com sirtunnel.py "${PROXY_DOMAIN}" "${PROXY_PORT}"
+exit 1
