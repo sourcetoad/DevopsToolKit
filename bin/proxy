@@ -20,7 +20,7 @@ LOCAL_PORT=
 PROXY_TOKEN=${PINGGY_TOKEN:-}
 
 PINGGY_HOST=${PINGGY_HOST:-pro.pinggy.io}
-PINGGY_SSH_PORTS=${PINGGY_SSH_PORT:-443 80}
+PINGGY_SSH_PORT=${PINGGY_SSH_PORT:-443}
 
 source "$TOOLKIT_PATH/bin/_helpers"
 
@@ -60,7 +60,7 @@ function display_help() {
     tag "$BG_Y$BOLD" "Environment"
     describe "PINGGY_TOKEN" "Pinggy access token (shell or project .env)."
     describe "PINGGY_HOST" "Pinggy server. Defaults to pro.pinggy.io."
-    describe "PINGGY_SSH_PORT" "Pinggy SSH port. Defaults to 443, falling back to 80."
+    describe "PINGGY_SSH_PORT" "Pinggy SSH port (443 or 80). Defaults to 443."
 }
 
 function parse_arg() {
@@ -229,36 +229,30 @@ if [ -z "$PROXY_TOKEN" ]; then
     exit 1
 fi
 
+# nginx-proxy routes on the Host header, so the Pinggy domain must be listed in VIRTUAL_HOST.
+VIRTUAL_HOSTS=$(cat docker-compose*.yml docker/docker-compose*.yml 2> /dev/null | sed -nr 's/.*VIRTUAL_HOST=(.*)/\1/p')
+if [[ "$VIRTUAL_HOSTS" == *"://"* ]]; then
+    output_warning "VIRTUAL_HOST contains a scheme (e.g. https://). Use bare domains or nginx-proxy will fail to reload."
+elif [[ "$VIRTUAL_HOSTS" != *pinggy* ]]; then
+    output_warning "No Pinggy domain found in VIRTUAL_HOST. Add your persistent URL to docker-compose.override.yml and re-up, or nginx will return a 503."
+fi
+
 echo
 output_info "Starting proxy... $FG_C${LOCAL_DOMAIN}$FG_N via $FG_C${LOCAL_HOST}$FG_N:$FG_M${LOCAL_PORT}$RESET -> $FG_C${PINGGY_HOST}$RESET"
 output_info "Your public URL will be printed by Pinggy below."
 echo
 
-# Rewrite the Host header so nginx-proxy routes to this project without a VIRTUAL_HOST override.
-# Pinggy only prints its output with a TTY when a command (the Host rewrite) is passed.
-TTY_FLAG=-T
-if [ -t 0 ]; then
-    TTY_FLAG=-t
+ssh -p "${PINGGY_SSH_PORT}" \
+    -R "0:${LOCAL_HOST}:${LOCAL_PORT}" \
+    -o StrictHostKeyChecking=no \
+    -o ConnectTimeout=10 \
+    -o ServerAliveInterval=30 \
+    "${PROXY_TOKEN}@${PINGGY_HOST}"
+EXIT_CODE=$?
+
+if [ "$EXIT_CODE" -eq 255 ]; then
+    echo
+    output_warning "Tunnel failed or closed. If it could not connect, try PINGGY_SSH_PORT=80. If the token is in use, close that tunnel or pick another token."
 fi
 
-for SSH_PORT in $PINGGY_SSH_PORTS; do
-    STARTED_AT=$SECONDS
-
-    ssh "$TTY_FLAG" -p "${SSH_PORT}" \
-        -R "0:${LOCAL_HOST}:${LOCAL_PORT}" \
-        -o StrictHostKeyChecking=no \
-        -o ConnectTimeout=10 \
-        -o ServerAliveInterval=30 \
-        "${PROXY_TOKEN}@${PINGGY_HOST}" \
-        "u:Host:${LOCAL_DOMAIN}"
-    EXIT_CODE=$?
-
-    # Only fall back when the connection failed quickly, not after a tunnel was running.
-    if [ "$EXIT_CODE" -ne 255 ] || [ $((SECONDS - STARTED_AT)) -gt 20 ]; then
-        exit "$EXIT_CODE"
-    fi
-
-    output_warning "Could not connect to ${PINGGY_HOST} on port ${SSH_PORT}."
-done
-
-exit 1
+exit "$EXIT_CODE"
